@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Oxanium', sans-serif;
+      }
+      @keyframes spin {
+        from { transform-origin: center; transform: rotate(0deg); }
+        to { transform-origin: center; transform: rotate(360deg); }
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); }
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
+      }
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      @keyframes draw-line {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes gentle-spin {
+        0% { transform: rotateY(-5deg); }
+        100% { transform: rotateY(5deg); }
+      }
+      @keyframes pixel-glitch-1 {
+        0% { clip-path: inset(50% -6px 30% 0); transform: translate(-10px, -5px); }
+        10% { clip-path: inset(20% -6px 70% 0); transform: translate(5px, 5px); }
+        20% { clip-path: inset(80% -6px 5% 0); transform: translate(-5px, 10px); }
+        30% { clip-path: inset(40% -6px 40% 0); transform: translate(10px, -5px); }
+        40% { clip-path: inset(60% -6px 20% 0); transform: translate(-10px, 5px); }
+        50% { clip-path: inset(10% -6px 85% 0); transform: translate(5px, -10px); }
+        60% { clip-path: inset(70% -6px 10% 0); transform: translate(-5px, 10px); }
+        70% { clip-path: inset(30% -6px 50% 0); transform: translate(10px, -5px); }
+        80% { clip-path: inset(90% -6px 2% 0); transform: translate(-10px, 5px); }
+        90% { clip-path: inset(45% -6px 45% 0); transform: translate(5px, -10px); }
+        100% { clip-path: inset(70% -6px 20% 0); transform: translate(-5px, 5px); }
+      }
+      @keyframes pixel-glitch-2 {
+        0% { clip-path: inset(80% 0 10% -6px); transform: translate(10px, 5px); }
+        10% { clip-path: inset(10% 0 60% -6px); transform: translate(-5px, -5px); }
+        20% { clip-path: inset(40% 0 50% -6px); transform: translate(5px, -10px); }
+        30% { clip-path: inset(70% 0 20% -6px); transform: translate(-10px, 5px); }
+        40% { clip-path: inset(30% 0 60% -6px); transform: translate(10px, -5px); }
+        50% { clip-path: inset(90% 0 5% -6px); transform: translate(-5px, 10px); }
+        60% { clip-path: inset(20% 0 75% -6px); transform: translate(5px, -10px); }
+        70% { clip-path: inset(60% 0 30% -6px); transform: translate(-10px, 5px); }
+        80% { clip-path: inset(50% 0 40% -6px); transform: translate(10px, -5px); }
+        90% { clip-path: inset(5% 0 90% -6px); transform: translate(-5px, 10px); }
+        100% { clip-path: inset(30% 0 60% -6px); transform: translate(5px, -5px); }
+      }
+      @keyframes fade-float-cycle {
+        0%, 20%, 100% { opacity: 0; transform: translateY(10px); }
+        30%, 80% { opacity: 1; transform: translateY(0); }
+      }
+       @keyframes scan {
+        0%, 100% { transform: translateY(-50%); }
+        50% { transform: translateY(50%); }
+      }
+      @keyframes pulse-brain {
+        0%, 100% { stroke-opacity: 0.3; }
+        50% { stroke-opacity: 1; }
+      }
+      @keyframes rotate-gears {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes orbit {
+        from { transform: rotate(0deg) translateX(5px) rotate(0deg); }
+        to { transform: rotate(360deg) translateX(5px) rotate(-360deg); }
+      }
+      @keyframes morph-at {
+        0%, 10%, 100% { d: path('M3 8L12 2L21 8V16C21 18.2091 19.2091 20 17 20H7C4.79086 20 3 18.2091 3 16V8Z'); }
+        40%, 60% { d: path('M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4');}
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+</head>
+  <body class="bg-black text-white leading-relaxed antialiased selection:bg-white selection:text-black">
+    <canvas id="background-canvas" class="fixed top-0 left-0 w-full h-full z-[-1]"></canvas>
+    <div id="root" class="relative z-10"></div>
+  </body>
+</html>
