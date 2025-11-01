@@ -152,7 +152,7 @@ function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
     const time = state.clock.getElapsedTime()
     const positions = sphereRef.current.geometry.attributes.position.array as Float32Array
 
-    // Slow shape evolution - 20 seconds per cycle through 3 forms
+    // Gradual shape evolution - 20 seconds per cycle through 3 forms
     const evolutionCycle = 20
     
     // Determine current shape blend (0=sphere, 1=torus, 2=blob)
