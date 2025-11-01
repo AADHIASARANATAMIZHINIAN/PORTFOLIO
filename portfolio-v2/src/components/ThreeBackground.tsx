@@ -120,20 +120,17 @@ function Starfield() {
   )
 }
 
-// Morphing Organic Shape - transitions between different geometric forms
+// Morphing Organic Shape - Simple and stable version
 function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
   const sphereRef = useRef<THREE.Points>(null!)
   const noise3D = useMemo(() => createNoise3D(), [])
-  const [currentShape, setCurrentShape] = useState(0)
 
   const particles = useMemo(() => {
-    // Create particles in a spherical distribution
     const count = isMobile ? 8000 : 20000
     const temp = []
     const radius = 8
 
     for (let i = 0; i < count; i++) {
-      // Fibonacci sphere distribution for even particle placement
       const phi = Math.acos(-1 + (2 * i) / count)
       const theta = Math.sqrt(count * Math.PI) * phi
       
@@ -146,133 +143,79 @@ function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
     return new Float32Array(temp)
   }, [])
 
-  // Shape morphing functions - smooth interpolation between shapes
-  const getShapePosition = (x: number, y: number, z: number, currentShape: number, nextShape: number, blendFactor: number) => {
-    const distance = Math.sqrt(x * x + y * y + z * z)
-    if (distance === 0) return { x: 0, y: 0, z: 0 }
-    
-    const normalizedX = x / distance
-    const normalizedY = y / distance
-    const normalizedZ = z / distance
-    
-    // Get positions for both current and next shape
-    const getCurrentShape = (type: number) => {
-      switch(type) {
-        case 0: // Sphere
-          return { x: normalizedX, y: normalizedY, z: normalizedZ }
-        
-        case 1: // Cube
-          const cubeX = Math.sign(normalizedX) * Math.pow(Math.abs(normalizedX), 0.4)
-          const cubeY = Math.sign(normalizedY) * Math.pow(Math.abs(normalizedY), 0.4)
-          const cubeZ = Math.sign(normalizedZ) * Math.pow(Math.abs(normalizedZ), 0.4)
-          return { x: cubeX, y: cubeY, z: cubeZ }
-        
-        case 2: // Torus
-          const torusRad = Math.sqrt(normalizedX * normalizedX + normalizedZ * normalizedZ)
-          if (torusRad === 0) return { x: normalizedX, y: normalizedY, z: normalizedZ }
-          const torusX = normalizedX * (1 + 0.5 / torusRad) * 0.8
-          const torusZ = normalizedZ * (1 + 0.5 / torusRad) * 0.8
-          return { x: torusX, y: normalizedY * 0.6, z: torusZ }
-        
-        case 3: // Octahedron
-          return {
-            x: normalizedX * 1.1,
-            y: normalizedY * 1.4,
-            z: normalizedZ * 1.1
-          }
-        
-        case 4: // Twisted
-          const angle = Math.atan2(normalizedY, normalizedX) * 1.5
-          const twistedX = normalizedX * Math.cos(angle) - normalizedZ * Math.sin(angle)
-          const twistedZ = normalizedX * Math.sin(angle) + normalizedZ * Math.cos(angle)
-          return { x: twistedX * 0.9, y: normalizedY, z: twistedZ * 0.9 }
-        
-        default:
-          return { x: normalizedX, y: normalizedY, z: normalizedZ }
-      }
-    }
-    
-    const current = getCurrentShape(currentShape)
-    const next = getCurrentShape(nextShape)
-    
-    // Smooth interpolation between shapes
-    return {
-      x: current.x * (1 - blendFactor) + next.x * blendFactor,
-      y: current.y * (1 - blendFactor) + next.y * blendFactor,
-      z: current.z * (1 - blendFactor) + next.z * blendFactor
-    }
-  }
-
   useFrame((state) => {
     if (sphereRef.current) {
       const time = state.clock.getElapsedTime()
       const positions = sphereRef.current.geometry.attributes.position.array as Float32Array
       
-      // Shape morphing system - changes every 10 seconds with 2-second transition
-      const cycleDuration = 10
-      const transitionDuration = 2
-      const totalCycle = cycleDuration + transitionDuration
-      const timeInCycle = time % (totalCycle * 5) // 5 shapes
-      
-      const currentShapeIndex = Math.floor(timeInCycle / totalCycle) % 5
-      const nextShapeIndex = (currentShapeIndex + 1) % 5
-      const timeInCurrentShape = timeInCycle % totalCycle
-      
-      // Smooth blend factor for transitions
-      let blendFactor = 0
-      if (timeInCurrentShape > cycleDuration) {
-        // In transition phase
-        blendFactor = (timeInCurrentShape - cycleDuration) / transitionDuration
-        blendFactor = Math.sin(blendFactor * Math.PI / 2) // Ease-in-out
-      }
-      
-      if (currentShapeIndex !== currentShape) {
-        setCurrentShape(currentShapeIndex)
-      }
+      // Simple shape cycle - changes every 10 seconds
+      const cycleTime = 10
+      const shapeIndex = Math.floor(time / cycleTime) % 5
+      const transition = (time % cycleTime) / cycleTime
 
       for (let i = 0; i < positions.length; i += 3) {
-        const baseX = particles[i]
-        const baseY = particles[i + 1]
-        const baseZ = particles[i + 2]
+        // Use original particle positions
+        const origX = particles[i]
+        const origY = particles[i + 1]
+        const origZ = particles[i + 2]
         
-        // Calculate distance from center for radial effects
-        const distance = Math.sqrt(baseX * baseX + baseY * baseY + baseZ * baseZ)
-        if (distance === 0) continue
+        const distance = Math.sqrt(origX * origX + origY * origY + origZ * origZ)
+        const nx = origX / distance
+        const ny = origY / distance
+        const nz = origZ / distance
         
-        // Mouse interaction - particles react to mouse position
-        const dx = baseX - mouse.x * 15
-        const dy = baseY - mouse.y * 15
-        const dz = baseZ
-        const mouseDistance = Math.sqrt(dx * dx + dy * dy + dz * dz)
-        const mouseInfluence = Math.max(0, 1 - mouseDistance / 20) * 2.5
+        // Shape morphing with smooth sine transition
+        const t = Math.sin(transition * Math.PI) * 0.5
+        let shapeX = nx, shapeY = ny, shapeZ = nz
         
-        // Create organic breathing effect with multiple noise layers
-        const noise1 = noise3D(baseX * 0.2, baseY * 0.2, time * 0.4)
-        const noise2 = noise3D(baseX * 0.1, baseY * 0.1, time * 0.2)
-        const noise3Val = noise3D(baseX * 0.05, baseY * 0.05, time * 0.6)
+        if (shapeIndex === 1) {
+          // Cube
+          shapeX = nx * (1 - t) + Math.sign(nx) * 0.8 * t
+          shapeY = ny * (1 - t) + Math.sign(ny) * 0.8 * t
+          shapeZ = nz * (1 - t) + Math.sign(nz) * 0.8 * t
+        } else if (shapeIndex === 2) {
+          // Flattened torus-like
+          shapeX = nx * (1 + t * 0.3)
+          shapeY = ny * (1 - t * 0.4)
+          shapeZ = nz * (1 + t * 0.3)
+        } else if (shapeIndex === 3) {
+          // Stretched octahedron
+          shapeX = nx
+          shapeY = ny * (1 + t * 0.5)
+          shapeZ = nz
+        } else if (shapeIndex === 4) {
+          // Twisted
+          const angle = Math.atan2(ny, nx) * t * 1.5
+          shapeX = nx * Math.cos(angle) - nz * Math.sin(angle)
+          shapeZ = nx * Math.sin(angle) + nz * Math.cos(angle)
+          shapeY = ny
+        }
         
-        // Combine noises for complex organic motion
-        const displacement = (noise1 * 1.2 + noise2 * 0.6 + noise3Val * 0.4) * 1.0
+        // Mouse interaction
+        const dx = origX - mouse.x * 12
+        const dy = origY - mouse.y * 12
+        const mouseDistance = Math.sqrt(dx * dx + dy * dy)
+        const mouseInfluence = Math.max(0, 1 - mouseDistance / 18) * 2
         
-        // Breathing/pulsating effect
-        const pulse = Math.sin(time * 0.8) * 0.25 + Math.cos(time * 1.2) * 0.15
+        // Organic noise
+        const noise1 = noise3D(origX * 0.15, origY * 0.15, time * 0.3)
+        const noise2 = noise3D(origX * 0.08, origY * 0.08, time * 0.15)
+        const noiseEffect = (noise1 * 0.8 + noise2 * 0.5) * 0.8
         
-        // Get morphed shape position
-        const shapePos = getShapePosition(baseX, baseY, baseZ, currentShapeIndex, nextShapeIndex, blendFactor)
+        // Breathing
+        const pulse = Math.sin(time * 0.7) * 0.2 + Math.cos(time * 1.1) * 0.15
         
-        // Apply displacement and effects
-        const scale = 8 * (1 + displacement + pulse + mouseInfluence * 0.2)
+        // Final position - always based on original radius
+        const finalScale = distance * (1.0 + noiseEffect + pulse + mouseInfluence * 0.15)
         
-        positions[i] = shapePos.x * scale
-        positions[i + 1] = shapePos.y * scale
-        positions[i + 2] = shapePos.z * scale
+        positions[i] = shapeX * finalScale
+        positions[i + 1] = shapeY * finalScale
+        positions[i + 2] = shapeZ * finalScale
       }
 
       sphereRef.current.geometry.attributes.position.needsUpdate = true
-      
-      // Slow rotation for dynamic feel
-      sphereRef.current.rotation.y = time * 0.15
-      sphereRef.current.rotation.x = Math.sin(time * 0.3) * 0.2
+      sphereRef.current.rotation.y = time * 0.12
+      sphereRef.current.rotation.x = Math.sin(time * 0.25) * 0.15
     }
   })
 
@@ -290,7 +233,7 @@ function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
         size={isMobile ? 0.08 : 0.06}
         color="#10b981"
         transparent
-        opacity={0.7}
+        opacity={0.75}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
