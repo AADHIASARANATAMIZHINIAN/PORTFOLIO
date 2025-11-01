@@ -120,56 +120,83 @@ function Starfield() {
   )
 }
 
-// Particle Wave component - optimized for mobile
-function ParticleWave({ mouse }: { mouse: { x: number; y: number } }) {
-  const pointsRef = useRef<THREE.Points>(null!)
+// Organic Living Sphere - creates a breathing, pulsating effect
+function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
+  const sphereRef = useRef<THREE.Points>(null!)
   const noise3D = useMemo(() => createNoise3D(), [])
 
   const particles = useMemo(() => {
-    // Reduce particle count on mobile for better performance
-    const count = isMobile ? 5000 : 15000
+    // Create particles in a spherical distribution
+    const count = isMobile ? 8000 : 20000
     const temp = []
-    const width = isMobile ? 30 : 40
-    const height = isMobile ? 20 : 30
+    const radius = 8
 
     for (let i = 0; i < count; i++) {
-      const x = (Math.random() - 0.5) * width
-      const y = (Math.random() - 0.5) * height
-      const z = 0
+      // Fibonacci sphere distribution for even particle placement
+      const phi = Math.acos(-1 + (2 * i) / count)
+      const theta = Math.sqrt(count * Math.PI) * phi
+      
+      const x = radius * Math.cos(theta) * Math.sin(phi)
+      const y = radius * Math.sin(theta) * Math.sin(phi)
+      const z = radius * Math.cos(phi)
+      
       temp.push(x, y, z)
     }
     return new Float32Array(temp)
   }, [])
 
   useFrame((state) => {
-    if (pointsRef.current) {
+    if (sphereRef.current) {
       const time = state.clock.getElapsedTime()
-      const positions = pointsRef.current.geometry.attributes.position.array as Float32Array
+      const positions = sphereRef.current.geometry.attributes.position.array as Float32Array
 
       for (let i = 0; i < positions.length; i += 3) {
         const x = positions[i]
         const y = positions[i + 1]
+        const z = positions[i + 2]
         
-        // Mouse/Touch influence - slightly reduced for subtle touch response
-        const dx = x - mouse.x * 20
+        // Calculate distance from center for radial effects
+        const distance = Math.sqrt(x * x + y * y + z * z)
+        
+        // Mouse interaction - particles react to mouse position
+        const dx = x - mouse.x * 15
         const dy = y - mouse.y * 15
-        const mouseDistance = Math.sqrt(dx * dx + dy * dy)
-        const mouseInfluence = Math.max(0, 1 - mouseDistance / 15) * 2.5
+        const dz = z
+        const mouseDistance = Math.sqrt(dx * dx + dy * dy + dz * dz)
+        const mouseInfluence = Math.max(0, 1 - mouseDistance / 20) * 3
         
-        // Create wave with noise
-        const noise = noise3D(x * 0.08, y * 0.08, time * 0.3)
-        const noise2 = noise3D(x * 0.15, y * 0.15, time * 0.15)
+        // Create organic breathing effect with multiple noise layers
+        const noise1 = noise3D(x * 0.2, y * 0.2, time * 0.4)
+        const noise2 = noise3D(x * 0.1, y * 0.1, time * 0.2)
+        const noise3 = noise3D(x * 0.05, y * 0.05, time * 0.6)
         
-        positions[i + 2] = noise * 4.0 + noise2 * 2.0 + mouseInfluence
+        // Combine noises for complex organic motion
+        const displacement = (noise1 * 1.5 + noise2 * 0.8 + noise3 * 0.5) * 1.2
+        
+        // Breathing/pulsating effect
+        const pulse = Math.sin(time * 0.8) * 0.3 + Math.cos(time * 1.2) * 0.2
+        
+        // Apply displacement along the normal (radial direction)
+        const scale = 1 + displacement + pulse + mouseInfluence * 0.3
+        const normalizedX = x / distance
+        const normalizedY = y / distance
+        const normalizedZ = z / distance
+        
+        positions[i] = normalizedX * distance * scale
+        positions[i + 1] = normalizedY * distance * scale
+        positions[i + 2] = normalizedZ * distance * scale
       }
 
-      pointsRef.current.geometry.attributes.position.needsUpdate = true
-      pointsRef.current.rotation.z = Math.sin(time * 0.2) * 0.1
+      sphereRef.current.geometry.attributes.position.needsUpdate = true
+      
+      // Slow rotation for dynamic feel
+      sphereRef.current.rotation.y = time * 0.15
+      sphereRef.current.rotation.x = Math.sin(time * 0.3) * 0.2
     }
   })
 
   return (
-    <points ref={pointsRef} position={[0, 0, -5]}>
+    <points ref={sphereRef} position={[0, 0, -15]}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -179,10 +206,10 @@ function ParticleWave({ mouse }: { mouse: { x: number; y: number } }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={isMobile ? 0.1 : 0.12}
-        color="#e0e7ff"
+        size={isMobile ? 0.08 : 0.06}
+        color="#10b981"
         transparent
-        opacity={0.6}
+        opacity={0.7}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
@@ -268,7 +295,7 @@ function Scene() {
     <>
       <GradientOrbs />
       <Starfield />
-      <ParticleWave mouse={mouse} />
+      <OrganicSphere mouse={mouse} />
       <FloatingShapes />
     </>
   )
