@@ -342,10 +342,7 @@ function Scene() {
 
   return (
     <>
-      <GradientOrbs />
-      <Starfield />
       <OrganicSphere mouse={mouse} />
-      <FloatingShapes />
     </>
   )
 }
