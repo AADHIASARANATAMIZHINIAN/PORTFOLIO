@@ -154,7 +154,6 @@ function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
 
     // Slow shape evolution - 20 seconds per cycle through 3 forms
     const evolutionCycle = 20
-    const evolutionTime = (time % (evolutionCycle * 3)) / evolutionCycle
     
     // Determine current shape blend (0=sphere, 1=torus, 2=blob)
     const shapePhase = time % (evolutionCycle * 3)
