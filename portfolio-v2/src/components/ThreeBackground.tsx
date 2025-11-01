@@ -120,17 +120,18 @@ function Starfield() {
   )
 }
 
-// Morphing Organic Shape - Simple and stable version
+// Organic Living Sphere - Simple, stable, always visible
 function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
   const sphereRef = useRef<THREE.Points>(null!)
   const noise3D = useMemo(() => createNoise3D(), [])
 
   const particles = useMemo(() => {
-    const count = isMobile ? 8000 : 20000
-    const temp = []
-    const radius = 8
-
+    const count = isMobile ? 10000 : 25000
+    const positions = new Float32Array(count * 3)
+    const radius = 10
+    
     for (let i = 0; i < count; i++) {
+      // Fibonacci sphere for even distribution
       const phi = Math.acos(-1 + (2 * i) / count)
       const theta = Math.sqrt(count * Math.PI) * phi
       
@@ -138,89 +139,66 @@ function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
       const y = radius * Math.sin(theta) * Math.sin(phi)
       const z = radius * Math.cos(phi)
       
-      temp.push(x, y, z)
+      positions[i * 3] = x
+      positions[i * 3 + 1] = y
+      positions[i * 3 + 2] = z
     }
-    return new Float32Array(temp)
+    return positions
   }, [])
 
   useFrame((state) => {
-    if (sphereRef.current) {
-      const time = state.clock.getElapsedTime()
-      const positions = sphereRef.current.geometry.attributes.position.array as Float32Array
+    if (!sphereRef.current) return
+    
+    const time = state.clock.getElapsedTime()
+    const positions = sphereRef.current.geometry.attributes.position.array as Float32Array
+
+    for (let i = 0; i < positions.length; i += 3) {
+      // Get base position (never changes)
+      const baseX = particles[i]
+      const baseY = particles[i + 1]
+      const baseZ = particles[i + 2]
       
-      // Simple shape cycle - changes every 10 seconds
-      const cycleTime = 10
-      const shapeIndex = Math.floor(time / cycleTime) % 5
-      const transition = (time % cycleTime) / cycleTime
-
-      for (let i = 0; i < positions.length; i += 3) {
-        // Use original particle positions
-        const origX = particles[i]
-        const origY = particles[i + 1]
-        const origZ = particles[i + 2]
-        
-        const distance = Math.sqrt(origX * origX + origY * origY + origZ * origZ)
-        const nx = origX / distance
-        const ny = origY / distance
-        const nz = origZ / distance
-        
-        // Shape morphing with smooth sine transition
-        const t = Math.sin(transition * Math.PI) * 0.5
-        let shapeX = nx, shapeY = ny, shapeZ = nz
-        
-        if (shapeIndex === 1) {
-          // Cube
-          shapeX = nx * (1 - t) + Math.sign(nx) * 0.8 * t
-          shapeY = ny * (1 - t) + Math.sign(ny) * 0.8 * t
-          shapeZ = nz * (1 - t) + Math.sign(nz) * 0.8 * t
-        } else if (shapeIndex === 2) {
-          // Flattened torus-like
-          shapeX = nx * (1 + t * 0.3)
-          shapeY = ny * (1 - t * 0.4)
-          shapeZ = nz * (1 + t * 0.3)
-        } else if (shapeIndex === 3) {
-          // Stretched octahedron
-          shapeX = nx
-          shapeY = ny * (1 + t * 0.5)
-          shapeZ = nz
-        } else if (shapeIndex === 4) {
-          // Twisted
-          const angle = Math.atan2(ny, nx) * t * 1.5
-          shapeX = nx * Math.cos(angle) - nz * Math.sin(angle)
-          shapeZ = nx * Math.sin(angle) + nz * Math.cos(angle)
-          shapeY = ny
-        }
-        
-        // Mouse interaction
-        const dx = origX - mouse.x * 12
-        const dy = origY - mouse.y * 12
-        const mouseDistance = Math.sqrt(dx * dx + dy * dy)
-        const mouseInfluence = Math.max(0, 1 - mouseDistance / 18) * 2
-        
-        // Organic noise
-        const noise1 = noise3D(origX * 0.15, origY * 0.15, time * 0.3)
-        const noise2 = noise3D(origX * 0.08, origY * 0.08, time * 0.15)
-        const noiseEffect = (noise1 * 0.8 + noise2 * 0.5) * 0.8
-        
-        // Breathing
-        const pulse = Math.sin(time * 0.7) * 0.2 + Math.cos(time * 1.1) * 0.15
-        
-        // Final position - always based on original radius
-        const finalScale = distance * (1.0 + noiseEffect + pulse + mouseInfluence * 0.15)
-        
-        positions[i] = shapeX * finalScale
-        positions[i + 1] = shapeY * finalScale
-        positions[i + 2] = shapeZ * finalScale
-      }
-
-      sphereRef.current.geometry.attributes.position.needsUpdate = true
-      sphereRef.current.rotation.y = time * 0.12
-      sphereRef.current.rotation.x = Math.sin(time * 0.25) * 0.15
+      // Normalize
+      const length = Math.sqrt(baseX * baseX + baseY * baseY + baseZ * baseZ)
+      const nx = baseX / length
+      const ny = baseY / length
+      const nz = baseZ / length
+      
+      // Layered noise for organic movement (like in your reference)
+      const n1 = noise3D(nx * 2 + time * 0.3, ny * 2 + time * 0.3, nz * 2 + time * 0.3)
+      const n2 = noise3D(nx * 4 + time * 0.15, ny * 4 + time * 0.15, nz * 4 + time * 0.15)
+      const n3 = noise3D(nx * 8 + time * 0.5, ny * 8 + time * 0.5, nz * 8 + time * 0.5)
+      
+      // Combine noise layers
+      const noiseDisplacement = (n1 * 1.5 + n2 * 0.8 + n3 * 0.4) * 1.2
+      
+      // Breathing/pulsating
+      const pulse = Math.sin(time * 0.5) * 0.4 + Math.sin(time * 0.8) * 0.2
+      
+      // Mouse interaction
+      const dx = baseX - mouse.x * 10
+      const dy = baseY - mouse.y * 10
+      const dist = Math.sqrt(dx * dx + dy * dy + baseZ * baseZ)
+      const mouseEffect = Math.max(0, 1 - dist / 20) * 3
+      
+      // Final radius with all effects
+      const finalRadius = length + noiseDisplacement + pulse + mouseEffect
+      
+      // Set position (always visible, always positive radius)
+      positions[i] = nx * finalRadius
+      positions[i + 1] = ny * finalRadius
+      positions[i + 2] = nz * finalRadius
     }
+
+    sphereRef.current.geometry.attributes.position.needsUpdate = true
+    
+    // Gentle rotation
+    sphereRef.current.rotation.y = time * 0.08
+    sphereRef.current.rotation.x = Math.sin(time * 0.2) * 0.1
   })
 
   return (
-    <points ref={sphereRef} position={[0, 0, -15]}>
+    <points ref={sphereRef} position={[0, 0, -20]}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -230,10 +208,10 @@ function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={isMobile ? 0.08 : 0.06}
+        size={isMobile ? 0.05 : 0.04}
         color="#10b981"
         transparent
-        opacity={0.75}
+        opacity={0.8}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
