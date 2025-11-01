@@ -146,63 +146,60 @@ function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
     return new Float32Array(temp)
   }, [])
 
-  // Shape morphing functions
-  const getShapePosition = (x: number, y: number, z: number, shapeType: number, progress: number) => {
+  // Shape morphing functions - smooth interpolation between shapes
+  const getShapePosition = (x: number, y: number, z: number, currentShape: number, nextShape: number, blendFactor: number) => {
     const distance = Math.sqrt(x * x + y * y + z * z)
+    if (distance === 0) return { x: 0, y: 0, z: 0 }
+    
     const normalizedX = x / distance
     const normalizedY = y / distance
     const normalizedZ = z / distance
     
-    // Smooth transition factor
-    const t = (Math.sin(progress * Math.PI * 2) + 1) / 2
+    // Get positions for both current and next shape
+    const getCurrentShape = (type: number) => {
+      switch(type) {
+        case 0: // Sphere
+          return { x: normalizedX, y: normalizedY, z: normalizedZ }
+        
+        case 1: // Cube
+          const cubeX = Math.sign(normalizedX) * Math.pow(Math.abs(normalizedX), 0.4)
+          const cubeY = Math.sign(normalizedY) * Math.pow(Math.abs(normalizedY), 0.4)
+          const cubeZ = Math.sign(normalizedZ) * Math.pow(Math.abs(normalizedZ), 0.4)
+          return { x: cubeX, y: cubeY, z: cubeZ }
+        
+        case 2: // Torus
+          const torusRad = Math.sqrt(normalizedX * normalizedX + normalizedZ * normalizedZ)
+          if (torusRad === 0) return { x: normalizedX, y: normalizedY, z: normalizedZ }
+          const torusX = normalizedX * (1 + 0.5 / torusRad) * 0.8
+          const torusZ = normalizedZ * (1 + 0.5 / torusRad) * 0.8
+          return { x: torusX, y: normalizedY * 0.6, z: torusZ }
+        
+        case 3: // Octahedron
+          return {
+            x: normalizedX * 1.1,
+            y: normalizedY * 1.4,
+            z: normalizedZ * 1.1
+          }
+        
+        case 4: // Twisted
+          const angle = Math.atan2(normalizedY, normalizedX) * 1.5
+          const twistedX = normalizedX * Math.cos(angle) - normalizedZ * Math.sin(angle)
+          const twistedZ = normalizedX * Math.sin(angle) + normalizedZ * Math.cos(angle)
+          return { x: twistedX * 0.9, y: normalizedY, z: twistedZ * 0.9 }
+        
+        default:
+          return { x: normalizedX, y: normalizedY, z: normalizedZ }
+      }
+    }
     
-    switch(shapeType) {
-      case 0: // Sphere (base)
-        return { x: normalizedX, y: normalizedY, z: normalizedZ }
-      
-      case 1: // Cube
-        const cubeX = Math.sign(normalizedX) * Math.pow(Math.abs(normalizedX), 0.5)
-        const cubeY = Math.sign(normalizedY) * Math.pow(Math.abs(normalizedY), 0.5)
-        const cubeZ = Math.sign(normalizedZ) * Math.pow(Math.abs(normalizedZ), 0.5)
-        return { 
-          x: normalizedX * (1 - t) + cubeX * t,
-          y: normalizedY * (1 - t) + cubeY * t,
-          z: normalizedZ * (1 - t) + cubeZ * t
-        }
-      
-      case 2: // Torus
-        const torusR = 1.0
-        const torusRad = Math.sqrt(normalizedX * normalizedX + normalizedZ * normalizedZ)
-        const torusX = normalizedX * (1 + torusR / torusRad)
-        const torusZ = normalizedZ * (1 + torusR / torusRad)
-        return {
-          x: normalizedX * (1 - t) + torusX * t * 0.7,
-          y: normalizedY,
-          z: normalizedZ * (1 - t) + torusZ * t * 0.7
-        }
-      
-      case 3: // Octahedron/Diamond
-        const octaX = Math.sign(normalizedX) * Math.abs(normalizedX)
-        const octaY = Math.sign(normalizedY) * Math.abs(normalizedY) * 1.3
-        const octaZ = Math.sign(normalizedZ) * Math.abs(normalizedZ)
-        return {
-          x: normalizedX * (1 - t) + octaX * t,
-          y: normalizedY * (1 - t) + octaY * t,
-          z: normalizedZ * (1 - t) + octaZ * t
-        }
-      
-      case 4: // Twisted shape
-        const twist = Math.atan2(normalizedY, normalizedX) * 2
-        const twistedX = normalizedX * Math.cos(twist) - normalizedZ * Math.sin(twist)
-        const twistedZ = normalizedX * Math.sin(twist) + normalizedZ * Math.cos(twist)
-        return {
-          x: normalizedX * (1 - t) + twistedX * t,
-          y: normalizedY,
-          z: normalizedZ * (1 - t) + twistedZ * t
-        }
-      
-      default:
-        return { x: normalizedX, y: normalizedY, z: normalizedZ }
+    const current = getCurrentShape(currentShape)
+    const next = getCurrentShape(nextShape)
+    
+    // Smooth interpolation between shapes
+    return {
+      x: current.x * (1 - blendFactor) + next.x * blendFactor,
+      y: current.y * (1 - blendFactor) + next.y * blendFactor,
+      z: current.z * (1 - blendFactor) + next.z * blendFactor
     }
   }
 
@@ -211,49 +208,64 @@ function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
       const time = state.clock.getElapsedTime()
       const positions = sphereRef.current.geometry.attributes.position.array as Float32Array
       
-      // Change shape every 8 seconds
-      const shapeIndex = Math.floor(time / 8) % 5
-      const shapeProgress = (time % 8) / 8
+      // Shape morphing system - changes every 10 seconds with 2-second transition
+      const cycleDuration = 10
+      const transitionDuration = 2
+      const totalCycle = cycleDuration + transitionDuration
+      const timeInCycle = time % (totalCycle * 5) // 5 shapes
       
-      if (shapeIndex !== currentShape) {
-        setCurrentShape(shapeIndex)
+      const currentShapeIndex = Math.floor(timeInCycle / totalCycle) % 5
+      const nextShapeIndex = (currentShapeIndex + 1) % 5
+      const timeInCurrentShape = timeInCycle % totalCycle
+      
+      // Smooth blend factor for transitions
+      let blendFactor = 0
+      if (timeInCurrentShape > cycleDuration) {
+        // In transition phase
+        blendFactor = (timeInCurrentShape - cycleDuration) / transitionDuration
+        blendFactor = Math.sin(blendFactor * Math.PI / 2) // Ease-in-out
+      }
+      
+      if (currentShapeIndex !== currentShape) {
+        setCurrentShape(currentShapeIndex)
       }
 
       for (let i = 0; i < positions.length; i += 3) {
-        const x = positions[i]
-        const y = positions[i + 1]
-        const z = positions[i + 2]
+        const baseX = particles[i]
+        const baseY = particles[i + 1]
+        const baseZ = particles[i + 2]
         
         // Calculate distance from center for radial effects
-        const distance = Math.sqrt(x * x + y * y + z * z)
+        const distance = Math.sqrt(baseX * baseX + baseY * baseY + baseZ * baseZ)
+        if (distance === 0) continue
         
         // Mouse interaction - particles react to mouse position
-        const dx = x - mouse.x * 15
-        const dy = y - mouse.y * 15
-        const dz = z
+        const dx = baseX - mouse.x * 15
+        const dy = baseY - mouse.y * 15
+        const dz = baseZ
         const mouseDistance = Math.sqrt(dx * dx + dy * dy + dz * dz)
-        const mouseInfluence = Math.max(0, 1 - mouseDistance / 20) * 3
+        const mouseInfluence = Math.max(0, 1 - mouseDistance / 20) * 2.5
         
         // Create organic breathing effect with multiple noise layers
-        const noise1 = noise3D(x * 0.2, y * 0.2, time * 0.4)
-        const noise2 = noise3D(x * 0.1, y * 0.1, time * 0.2)
-        const noise3Val = noise3D(x * 0.05, y * 0.05, time * 0.6)
+        const noise1 = noise3D(baseX * 0.2, baseY * 0.2, time * 0.4)
+        const noise2 = noise3D(baseX * 0.1, baseY * 0.1, time * 0.2)
+        const noise3Val = noise3D(baseX * 0.05, baseY * 0.05, time * 0.6)
         
         // Combine noises for complex organic motion
-        const displacement = (noise1 * 1.5 + noise2 * 0.8 + noise3Val * 0.5) * 1.2
+        const displacement = (noise1 * 1.2 + noise2 * 0.6 + noise3Val * 0.4) * 1.0
         
         // Breathing/pulsating effect
-        const pulse = Math.sin(time * 0.8) * 0.3 + Math.cos(time * 1.2) * 0.2
+        const pulse = Math.sin(time * 0.8) * 0.25 + Math.cos(time * 1.2) * 0.15
         
         // Get morphed shape position
-        const shapePos = getShapePosition(x, y, z, shapeIndex, shapeProgress)
+        const shapePos = getShapePosition(baseX, baseY, baseZ, currentShapeIndex, nextShapeIndex, blendFactor)
         
-        // Apply displacement along the morphed normal
-        const scale = 1 + displacement + pulse + mouseInfluence * 0.3
+        // Apply displacement and effects
+        const scale = 8 * (1 + displacement + pulse + mouseInfluence * 0.2)
         
-        positions[i] = shapePos.x * distance * scale
-        positions[i + 1] = shapePos.y * distance * scale
-        positions[i + 2] = shapePos.z * distance * scale
+        positions[i] = shapePos.x * scale
+        positions[i + 1] = shapePos.y * scale
+        positions[i + 2] = shapePos.z * scale
       }
 
       sphereRef.current.geometry.attributes.position.needsUpdate = true
