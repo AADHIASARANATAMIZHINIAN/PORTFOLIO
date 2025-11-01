@@ -6,6 +6,77 @@ import { createNoise3D } from 'simplex-noise'
 // Detect mobile device
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
+// Animated gradient orbs for depth and atmosphere
+function GradientOrbs() {
+  const orb1Ref = useRef<THREE.Mesh>(null!)
+  const orb2Ref = useRef<THREE.Mesh>(null!)
+  const orb3Ref = useRef<THREE.Mesh>(null!)
+  
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime()
+    
+    // Orb 1 - Purple/Blue
+    if (orb1Ref.current) {
+      orb1Ref.current.position.x = Math.sin(time * 0.2) * 15
+      orb1Ref.current.position.y = Math.cos(time * 0.15) * 10
+      orb1Ref.current.position.z = -30 + Math.sin(time * 0.1) * 5
+    }
+    
+    // Orb 2 - Cyan/Teal
+    if (orb2Ref.current) {
+      orb2Ref.current.position.x = Math.cos(time * 0.25) * 20
+      orb2Ref.current.position.y = Math.sin(time * 0.2) * 15
+      orb2Ref.current.position.z = -25 + Math.cos(time * 0.12) * 5
+    }
+    
+    // Orb 3 - Blue/Indigo (only on desktop)
+    if (orb3Ref.current && !isMobile) {
+      orb3Ref.current.position.x = Math.sin(time * 0.18) * 18
+      orb3Ref.current.position.y = Math.cos(time * 0.22) * 12
+      orb3Ref.current.position.z = -35 + Math.sin(time * 0.15) * 5
+    }
+  })
+
+  return (
+    <group>
+      {/* Orb 1 - Purple/Blue gradient */}
+      <mesh ref={orb1Ref}>
+        <sphereGeometry args={[8, 32, 32]} />
+        <meshBasicMaterial 
+          color="#6366f1" 
+          transparent 
+          opacity={0.08}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      
+      {/* Orb 2 - Cyan/Teal gradient */}
+      <mesh ref={orb2Ref}>
+        <sphereGeometry args={[10, 32, 32]} />
+        <meshBasicMaterial 
+          color="#06b6d4" 
+          transparent 
+          opacity={0.06}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      
+      {/* Orb 3 - Blue/Indigo (desktop only) */}
+      {!isMobile && (
+        <mesh ref={orb3Ref}>
+          <sphereGeometry args={[7, 32, 32]} />
+          <meshBasicMaterial 
+            color="#4f46e5" 
+            transparent 
+            opacity={0.07}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      )}
+    </group>
+  )
+}
+
 // Starfield component - optimized for mobile
 function Starfield() {
   const starsRef = useRef<THREE.Points>(null!)
@@ -108,10 +179,10 @@ function ParticleWave({ mouse }: { mouse: { x: number; y: number } }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.08}
-        color="#d1d5db"
+        size={isMobile ? 0.1 : 0.12}
+        color="#e0e7ff"
         transparent
-        opacity={0.4}
+        opacity={0.6}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
@@ -195,6 +266,7 @@ function Scene() {
 
   return (
     <>
+      <GradientOrbs />
       <Starfield />
       <ParticleWave mouse={mouse} />
       <FloatingShapes />
@@ -217,6 +289,7 @@ export default function ThreeBackground() {
         }}
       >
         <ambientLight intensity={0.5} />
+        <fog attach="fog" args={['#0a0a0a', 20, 60]} />
         <Scene />
       </Canvas>
     </div>
