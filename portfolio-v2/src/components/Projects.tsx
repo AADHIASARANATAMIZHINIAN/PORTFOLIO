@@ -1,5 +1,5 @@
 import { ExternalLink, Github } from 'lucide-react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useRef } from 'react'
 
 const projects = [
@@ -40,12 +40,6 @@ const projects = [
 
 export default function Projects() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  })
-
-  const x = useTransform(scrollYProgress, [0, 1], ['5%', '-25%'])
 
   return (
     <section id="projects" className="py-32 relative overflow-hidden" ref={containerRef}>
@@ -75,19 +69,24 @@ export default function Projects() {
             Featured projects that showcase my expertise in building{' '}
             <span className="text-gray-500">exceptional digital experiences</span>
           </h2>
+          <p className="text-gray-400 mt-4 text-sm md:text-base">
+            👉 Swipe or scroll horizontally to explore projects
+          </p>
         </motion.div>
       </div>
 
-      {/* Horizontal Scrolling Projects */}
-      <div className="relative">
-        <motion.div 
-          style={{ x }}
-          className="flex gap-8 px-6 lg:px-8 pb-8"
-        >
+      {/* Horizontal Scrolling Projects - User Controllable */}
+      <div className="relative overflow-x-auto overflow-y-hidden scrollbar-hide pb-8" 
+           style={{ 
+             scrollbarWidth: 'none',
+             msOverflowStyle: 'none',
+             WebkitOverflowScrolling: 'touch'
+           }}>
+        <div className="flex gap-6 md:gap-8 px-6 lg:px-8 min-w-max">
           {projects.map((project, index) => (
             <motion.div
               key={project.id}
-              className="group min-w-[85vw] md:min-w-[600px] lg:min-w-[700px]"
+              className="group w-[85vw] md:w-[600px] lg:w-[700px] flex-shrink-0"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -192,7 +191,7 @@ export default function Projects() {
               </motion.div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* View All Projects Link */}

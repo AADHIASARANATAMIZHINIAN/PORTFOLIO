@@ -3,13 +3,18 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { createNoise3D } from 'simplex-noise'
 
-// Starfield component
+// Detect mobile device
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
+// Starfield component - optimized for mobile
 function Starfield() {
   const starsRef = useRef<THREE.Points>(null!)
   
   const starPositions = useMemo(() => {
-    const positions = new Float32Array(2000 * 3)
-    for (let i = 0; i < 2000; i++) {
+    // Reduce star count on mobile
+    const starCount = isMobile ? 800 : 2000
+    const positions = new Float32Array(starCount * 3)
+    for (let i = 0; i < starCount; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 100
       positions[i * 3 + 1] = (Math.random() - 0.5) * 100
       positions[i * 3 + 2] = (Math.random() - 0.5) * 100
@@ -19,7 +24,8 @@ function Starfield() {
 
   useFrame((state) => {
     if (starsRef.current) {
-      starsRef.current.rotation.y = state.clock.getElapsedTime() * 0.02
+      // Slower rotation on mobile for performance
+      starsRef.current.rotation.y = state.clock.getElapsedTime() * (isMobile ? 0.01 : 0.02)
     }
   })
 
@@ -28,26 +34,32 @@ function Starfield() {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={2000}
+          count={isMobile ? 800 : 2000}
           array={starPositions}
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial size={0.05} color="#ffffff" transparent opacity={0.6} />
+      <pointsMaterial 
+        size={isMobile ? 0.08 : 0.05} 
+        color="#ffffff" 
+        transparent 
+        opacity={0.6} 
+      />
     </points>
   )
 }
 
-// Particle Wave component (centered, responds to mouse and touch)
+// Particle Wave component - optimized for mobile
 function ParticleWave({ mouse }: { mouse: { x: number; y: number } }) {
   const pointsRef = useRef<THREE.Points>(null!)
   const noise3D = useMemo(() => createNoise3D(), [])
 
   const particles = useMemo(() => {
-    const count = 15000
+    // Reduce particle count on mobile for better performance
+    const count = isMobile ? 5000 : 15000
     const temp = []
-    const width = 40
-    const height = 30
+    const width = isMobile ? 30 : 40
+    const height = isMobile ? 20 : 30
 
     for (let i = 0; i < count; i++) {
       const x = (Math.random() - 0.5) * width
@@ -133,6 +145,13 @@ export default function ThreeBackground() {
       <Canvas
         camera={{ position: [0, 0, 30], fov: 75 }}
         style={{ background: 'transparent', touchAction: 'none' }}
+        dpr={isMobile ? [1, 1.5] : [1, 2]} // Lower pixel ratio on mobile
+        performance={{ min: 0.5 }} // Allow lower FPS on mobile for battery
+        gl={{ 
+          antialias: !isMobile, // Disable antialiasing on mobile for performance
+          alpha: true,
+          powerPreference: isMobile ? 'low-power' : 'high-performance'
+        }}
       >
         <ambientLight intensity={0.5} />
         <Scene />

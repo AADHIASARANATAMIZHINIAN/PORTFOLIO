@@ -70,6 +70,22 @@
     text-wrap: balance;
   }
   
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Smooth horizontal scroll */
+  .horizontal-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
   /* Shine/Shimmer effect for text - only on letters */
   .shine-effect {
     background: linear-gradient(
