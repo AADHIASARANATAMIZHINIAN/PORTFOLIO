@@ -124,37 +124,39 @@ export default function Projects() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
               <motion.div 
-                className="relative overflow-hidden rounded-3xl bg-dark-900/30 backdrop-blur-sm border border-white/10 h-[600px]"
+                className="relative overflow-hidden rounded-3xl bg-dark-800/50 backdrop-blur-xl border border-white/20 h-full shadow-2xl"
                 whileHover={{ 
-                  borderColor: "rgba(255,255,255,0.3)",
+                  borderColor: "rgba(255,255,255,0.4)",
                   scale: 1.02,
+                  y: -8,
+                  boxShadow: "0 25px 70px rgba(139,92,246,0.2)"
                 }}
                 transition={{ duration: 0.4 }}
               >
                 {/* Project Image */}
-                <div className="relative h-[350px] overflow-hidden">
+                <div className="relative h-[280px] md:h-[320px] overflow-hidden">
                   <motion.img
                     src={project.image}
                     alt={project.title}
                     className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.7 }}
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ duration: 0.6 }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-dark-900/90 via-dark-900/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/60 to-transparent" />
                   
                   {/* Year Badge */}
                   <motion.div 
-                    className="absolute top-6 right-6 bg-white/10 backdrop-blur-lg px-4 py-2 rounded-full text-sm font-semibold"
-                    whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.2)' }}
+                    className="absolute top-4 right-4 bg-white/15 backdrop-blur-md px-4 py-2 rounded-full text-sm font-bold shadow-lg"
+                    whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.25)' }}
                   >
                     {project.year}
                   </motion.div>
                 </div>
 
                 {/* Project Content */}
-                <div className="p-8 space-y-4">
+                <div className="p-6 md:p-8 space-y-5">
                   <motion.h3 
-                    className="text-3xl font-bold"
+                    className="text-2xl md:text-3xl font-bold leading-tight text-white"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -164,7 +166,7 @@ export default function Projects() {
                   </motion.h3>
                   
                   <motion.p 
-                    className="text-gray-400 line-clamp-3"
+                    className="text-gray-300 leading-relaxed text-sm md:text-base min-h-[80px]"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -175,7 +177,7 @@ export default function Projects() {
 
                   {/* Tags */}
                   <motion.div 
-                    className="flex flex-wrap gap-2"
+                    className="flex flex-wrap gap-2 pt-2"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -184,8 +186,8 @@ export default function Projects() {
                     {project.tags.map((tag) => (
                       <motion.span
                         key={tag}
-                        className="px-3 py-1 text-xs font-medium bg-white/5 rounded-full border border-white/10"
-                        whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.2)', scale: 1.05 }}
+                        className="px-4 py-1.5 text-xs md:text-sm font-semibold bg-white/10 text-white rounded-full border border-white/20 shadow-sm"
+                        whileHover={{ backgroundColor: 'rgba(255,255,255,0.2)', borderColor: 'rgba(255,255,255,0.3)', scale: 1.05, y: -2 }}
                         transition={{ duration: 0.2 }}
                       >
                         {tag}
@@ -194,25 +196,25 @@ export default function Projects() {
                   </motion.div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-4 pt-4">
+                  <div className="flex gap-3 md:gap-4 pt-6">
                     <motion.a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 rounded-full font-semibold group"
-                      whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.15)' }}
-                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-5 md:px-7 py-3 md:py-3.5 bg-white text-black rounded-full font-bold text-sm md:text-base group shadow-lg hover:shadow-xl"
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
                     >
                       <span>View Live</span>
-                      <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
                     </motion.a>
                     <motion.a
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 border border-white/20 rounded-full font-semibold group"
-                      whileHover={{ scale: 1.05, borderColor: 'rgba(255,255,255,0.4)', backgroundColor: 'rgba(255,255,255,0.05)' }}
-                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-5 md:px-7 py-3 md:py-3.5 border-2 border-white/30 rounded-full font-bold text-sm md:text-base group hover:bg-white/10"
+                      whileHover={{ scale: 1.05, borderColor: 'rgba(255,255,255,0.5)', y: -2 }}
+                      whileTap={{ scale: 0.98 }}
                     >
                       <Github className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                       <span>Code</span>
