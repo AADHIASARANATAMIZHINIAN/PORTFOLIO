@@ -152,8 +152,9 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors"
+                    className="w-full px-4 py-3 text-base bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors"
                     placeholder="John Doe"
+                    autoComplete="name"
                   />
                 </div>
 
@@ -171,8 +172,9 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors"
+                    className="w-full px-4 py-3 text-base bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors"
                     placeholder="john@example.com"
+                    autoComplete="email"
                   />
                 </div>
 
@@ -190,7 +192,7 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     rows={6}
-                    className="w-full px-4 py-3 bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors resize-none"
+                    className="w-full px-4 py-3 text-base bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors resize-none"
                     placeholder="Tell me about your project..."
                   />
                 </div>

@@ -1,6 +1,6 @@
 import { ExternalLink, Github } from 'lucide-react'
-import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
 
 const projects = [
   {
@@ -40,6 +40,35 @@ const projects = [
 
 export default function Projects() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [isUserScrolling, setIsUserScrolling] = useState(false)
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start'],
+  })
+
+  // Auto-scroll animation (only when user isn't scrolling)
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%'])
+
+  // Detect user scroll
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current
+    if (!scrollContainer) return
+
+    let scrollTimeout: ReturnType<typeof setTimeout>
+    const handleScroll = () => {
+      setIsUserScrolling(true)
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => setIsUserScrolling(false), 1000)
+    }
+
+    scrollContainer.addEventListener('scroll', handleScroll)
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll)
+      clearTimeout(scrollTimeout)
+    }
+  }, [])
 
   return (
     <section id="projects" className="py-32 relative overflow-hidden" ref={containerRef}>
@@ -75,18 +104,20 @@ export default function Projects() {
         </motion.div>
       </div>
 
-      {/* Horizontal Scrolling Projects - User Controllable */}
-      <div className="relative overflow-x-auto overflow-y-hidden scrollbar-hide pb-8" 
-           style={{ 
-             scrollbarWidth: 'none',
-             msOverflowStyle: 'none',
-             WebkitOverflowScrolling: 'touch'
-           }}>
-        <div className="flex gap-6 md:gap-8 px-6 lg:px-8 min-w-max">
+      {/* Hybrid Scrolling: Auto-scroll + User Control */}
+      <div 
+        ref={scrollContainerRef}
+        className="relative overflow-x-auto overflow-y-hidden scrollbar-hide pb-8 cursor-grab active:cursor-grabbing"
+      >
+        <motion.div 
+          style={{ x: isUserScrolling ? 0 : x }}
+          className="flex gap-6 md:gap-8 px-6 lg:px-8 min-w-max"
+          transition={{ type: "spring", stiffness: 50, damping: 20 }}
+        >
           {projects.map((project, index) => (
             <motion.div
               key={project.id}
-              className="group w-[85vw] md:w-[600px] lg:w-[700px] flex-shrink-0"
+              className="group w-[85vw] sm:w-[450px] md:w-[550px] lg:w-[650px] flex-shrink-0"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -191,7 +222,7 @@ export default function Projects() {
               </motion.div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* View All Projects Link */}

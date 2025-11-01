@@ -120,6 +120,68 @@ function ParticleWave({ mouse }: { mouse: { x: number; y: number } }) {
   )
 }
 
+// Floating geometric shapes
+function FloatingShapes() {
+  const groupRef = useRef<THREE.Group>(null!)
+  
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.05
+      groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.3) * 0.1
+    }
+  })
+
+  return (
+    <group ref={groupRef}>
+      {/* Torus */}
+      <mesh position={[-15, 10, -20]} rotation={[0, 0, 0]}>
+        <torusGeometry args={[2, 0.3, 16, 32]} />
+        <meshStandardMaterial 
+          color="#ffffff" 
+          transparent 
+          opacity={0.05} 
+          wireframe 
+        />
+      </mesh>
+      
+      {/* Octahedron */}
+      <mesh position={[18, -8, -15]} rotation={[0.5, 0.5, 0]}>
+        <octahedronGeometry args={[2, 0]} />
+        <meshStandardMaterial 
+          color="#ffffff" 
+          transparent 
+          opacity={0.04} 
+          wireframe 
+        />
+      </mesh>
+      
+      {/* Icosahedron */}
+      <mesh position={[-12, -12, -18]} rotation={[0, 0, 0]}>
+        <icosahedronGeometry args={[1.5, 0]} />
+        <meshStandardMaterial 
+          color="#ffffff" 
+          transparent 
+          opacity={0.06} 
+          wireframe 
+        />
+      </mesh>
+
+      {/* Box (only on desktop for performance) */}
+      {!isMobile && (
+        <mesh position={[15, 15, -25]} rotation={[0.3, 0.3, 0]}>
+          <boxGeometry args={[2, 2, 2]} />
+          <meshStandardMaterial 
+            color="#ffffff" 
+            transparent 
+            opacity={0.03} 
+            wireframe 
+          />
+        </mesh>
+      )}
+    </group>
+  )
+}
+
 // Mouse and Touch tracker
 function Scene() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
@@ -135,6 +197,7 @@ function Scene() {
     <>
       <Starfield />
       <ParticleWave mouse={mouse} />
+      <FloatingShapes />
     </>
   )
 }
