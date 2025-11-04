@@ -88,7 +88,7 @@ export default function Contact() {
                 </a>
 
                 <a
-                  href="https://linkedin.com/in/aadhiasaranat"
+                  href="https://www.linkedin.com/in/aadhiasarana-t-529641328"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 text-lg hover:text-gray-300 transition-colors group"

@@ -191,7 +191,7 @@ export default function Hero() {
           >
             {[
               { href: "https://github.com/AADHIASARANATAMIZHINIAN", icon: Github, label: "GitHub" },
-              { href: "https://linkedin.com/in/aadhiasaranat", icon: Linkedin, label: "LinkedIn" },
+              { href: "https://www.linkedin.com/in/aadhiasarana-t-529641328", icon: Linkedin, label: "LinkedIn" },
               { href: "mailto:aadhiasarana12@gmail.com", icon: Mail, label: "Email" },
             ].map((social, index) => (
               <motion.a

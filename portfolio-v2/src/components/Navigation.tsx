@@ -52,9 +52,8 @@ export default function Navigation({ activeSection }: NavigationProps) {
               </a>
             ))}
             <a
-              href="https://drive.google.com/file/d/YOUR_RESUME_ID/view"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/AADHI_RESUME.pdf"
+              download="AADHI_RESUME.pdf"
               className="ml-4 px-6 py-2 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-200 transition-all duration-300"
             >
               Resume
@@ -108,9 +107,8 @@ export default function Navigation({ activeSection }: NavigationProps) {
             ))}
             
             <motion.a
-              href="https://drive.google.com/file/d/YOUR_RESUME_ID/view"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/AADHI_RESUME.pdf"
+              download="AADHI_RESUME.pdf"
               onClick={handleMenuClick}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
