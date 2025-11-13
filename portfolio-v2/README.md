@@ -187,7 +187,7 @@ Feel free to fork this project and customize it for your needs. If you find any 
 
 AADHIASARANA T
 - GitHub: [@AADHIASARANATAMIZHINIAN](https://github.com/AADHIASARANATAMIZHINIAN)
-- Email: your.email@example.com
+- Email: aadhiasarana12@gmail.com
 
 ---
 
