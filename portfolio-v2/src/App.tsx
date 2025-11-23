@@ -9,9 +9,12 @@ import Contact from './components/Contact.tsx'
 import Footer from './components/Footer.tsx'
 import ThreeBackground from './components/ThreeBackground.tsx'
 import SmoothScroll from './components/SmoothScroll.tsx'
+import SplashScreen from './components/SplashScreen.tsx'
 
 function App() {
   const [activeSection, setActiveSection] = useState('hero')
+  const [showSplash, setShowSplash] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,22 +60,31 @@ function App() {
     }
   }, [])
 
+  const handleSplashComplete = () => {
+    setShowSplash(false)
+    setIsLoaded(true)
+  }
+
   return (
-    <SmoothScroll>
-      <div className="min-h-screen text-white font-body">
-        <ThreeBackground />
-        <Navigation activeSection={activeSection} />
-        <main>
-          <Hero />
-          <About />
-          <Projects />
-          <Skills />
-          <Experience />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
-    </SmoothScroll>
+    <>
+      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+      
+      <SmoothScroll>
+        <div className="min-h-screen text-white font-body">
+          <ThreeBackground />
+          <Navigation activeSection={activeSection} />
+          <main>
+            <Hero />
+            <About />
+            <Projects />
+            <Skills />
+            <Experience />
+            <Contact />
+          </main>
+          <Footer />
+        </div>
+      </SmoothScroll>
+    </>
   )
 }
 

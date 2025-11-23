@@ -76,7 +76,7 @@
 - **Spacing:** Better letter-spacing and line-height
 - **Hierarchy:** Clear visual hierarchy throughout
 
-### Layout Updates
+##Layout Updates
 - Smaller, more refined heading sizes (balanced for modern web)
 - Better use of whitespace
 - Improved readability with Space Grotesk
