@@ -29,7 +29,7 @@ export default function Skills() {
           className="mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.6 }}
         >
           <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
@@ -42,7 +42,7 @@ export default function Skills() {
           className="mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight max-w-4xl">
@@ -55,7 +55,7 @@ export default function Skills() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-20"
         >
@@ -71,7 +71,7 @@ export default function Skills() {
               className="space-y-4"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
               <h3 className="text-xl font-bold">{category.title}</h3>
@@ -82,7 +82,7 @@ export default function Skills() {
                     className="text-gray-400 flex items-center gap-2 hover:text-gray-300 transition-colors"
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false }}
                     transition={{ duration: 0.4, delay: index * 0.1 + i * 0.05 }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-white/40"></span>
@@ -96,17 +96,17 @@ export default function Skills() {
 
         {/* Additional Info */}
         <motion.div 
-          className="mt-20"
+          className="mt-12 md:mt-20"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.8 }}
         >
           <motion.div 
-            className="bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-2xl p-8 md:p-12 hover:bg-dark-800/30 transition-all duration-300"
-            whileHover={{ scale: 1.02, borderColor: "rgba(255,255,255,0.2)" }}
+            className="bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-12 hover:bg-dark-800/30 transition-all duration-300"
+            whileHover={{ scale: 1.01, borderColor: "rgba(255,255,255,0.2)" }}
           >
-            <div className="grid md:grid-cols-3 gap-8 text-center">
+            <div className="grid md:grid-cols-3 gap-6 md:gap-8 text-center">
               {[
                 { title: "Fast", description: "Quick turnaround without compromising quality" },
                 { title: "Scalable", description: "Solutions built to grow with your business" },
@@ -116,11 +116,11 @@ export default function Skills() {
                   key={item.title}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
+                  whileHover={{ y: -3 }}
                 >
-                  <div className="text-4xl font-bold mb-2">{item.title}</div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2">{item.title}</div>
                   <div className="text-gray-400">{item.description}</div>
                 </motion.div>
               ))}

@@ -78,7 +78,7 @@ export default function Projects() {
           className="mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.6 }}
         >
           <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
@@ -91,7 +91,7 @@ export default function Projects() {
           className="mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight max-w-4xl shine-effect">
@@ -120,7 +120,7 @@ export default function Projects() {
               className="group w-[85vw] sm:w-[450px] md:w-[550px] lg:w-[650px] flex-shrink-0"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={{ once: false, margin: "-100px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
               <motion.div 

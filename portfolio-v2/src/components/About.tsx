@@ -9,7 +9,7 @@ export default function About() {
           className="mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, margin: "-100px" }}
           transition={{ duration: 0.6 }}
         >
           <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
@@ -23,7 +23,7 @@ export default function About() {
             className="space-y-8"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <motion.h2 
@@ -41,7 +41,7 @@ export default function About() {
             className="space-y-6 text-lg text-gray-400 leading-relaxed"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <motion.p 
@@ -76,10 +76,10 @@ export default function About() {
 
         {/* Stats */}
         <motion.div 
-          className="grid grid-cols-3 gap-8 mt-20"
+          className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, margin: "-100px" }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           {[
@@ -92,11 +92,11 @@ export default function About() {
               className="group"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-              whileHover={{ scale: 1.1, y: -5 }}
+              whileHover={{ scale: 1.05, y: -2 }}
             >
-              <div className="text-3xl xs:text-4xl md:text-5xl font-display font-bold shine-effect">{stat.value}</div>
+              <div className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold shine-effect">{stat.value}</div>
               <div className="text-sm text-gray-500 uppercase tracking-wider mt-2 group-hover:text-gray-400 transition-colors">
                 {stat.label}
               </div>
@@ -106,10 +106,10 @@ export default function About() {
 
         {/* Available for Work Badge */}
         <motion.div 
-          className="mt-16"
+          className="mt-12 md:mt-16"
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.6, delay: 0.8 }}
         >
           <motion.div 

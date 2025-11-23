@@ -1,189 +1,108 @@
-import { useRef, useMemo, useState } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { createNoise3D } from 'simplex-noise'
-
-// Detect mobile device
-const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-
-// Starfield component - optimized for mobile
-function Starfield() {
-  const starsRef = useRef<THREE.Points>(null!)
-  
-  const starPositions = useMemo(() => {
-    const starCount = isMobile ? 800 : 2000
-    const positions = new Float32Array(starCount * 3)
-    for (let i = 0; i < starCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 100
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 100
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 100
-    }
-    return positions
-  }, [])
-
-  useFrame((state) => {
-    if (starsRef.current) {
-      starsRef.current.rotation.y = state.clock.getElapsedTime() * (isMobile ? 0.01 : 0.02)
-    }
-  })
-
-  return (
-    <points ref={starsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={isMobile ? 800 : 2000}
-          array={starPositions}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <pointsMaterial 
-        size={isMobile ? 0.08 : 0.05} 
-        color="#ffffff" 
-        transparent 
-        opacity={0.6} 
-      />
-    </points>
-  )
-}
-
-// Organic Living Sphere - Simple breathing sphere
-function OrganicSphere({ mouse }: { mouse: { x: number; y: number } }) {
-  const sphereRef = useRef<THREE.Points>(null!)
-  const noise3D = useMemo(() => createNoise3D(), [])
-
-  const particles = useMemo(() => {
-    const count = isMobile ? 10000 : 25000
-    const positions = new Float32Array(count * 3)
-    const radius = 10
-    
-    for (let i = 0; i < count; i++) {
-      // Fibonacci sphere for even distribution
-      const phi = Math.acos(-1 + (2 * i) / count)
-      const theta = Math.sqrt(count * Math.PI) * phi
-      
-      const x = radius * Math.cos(theta) * Math.sin(phi)
-      const y = radius * Math.sin(theta) * Math.sin(phi)
-      const z = radius * Math.cos(phi)
-      
-      positions[i * 3] = x
-      positions[i * 3 + 1] = y
-      positions[i * 3 + 2] = z
-    }
-    return positions
-  }, [])
-
-  useFrame((state) => {
-    if (!sphereRef.current) return
-    
-    const time = state.clock.getElapsedTime()
-    const positions = sphereRef.current.geometry.attributes.position.array as Float32Array
-
-    for (let i = 0; i < positions.length; i += 3) {
-      // Get base position (never changes)
-      const baseX = particles[i]
-      const baseY = particles[i + 1]
-      const baseZ = particles[i + 2]
-      
-      // Normalize
-      const length = Math.sqrt(baseX * baseX + baseY * baseY + baseZ * baseZ)
-      const nx = baseX / length
-      const ny = baseY / length
-      const nz = baseZ / length
-      
-      // Layered noise for organic movement
-      const n1 = noise3D(nx * 2 + time * 0.3, ny * 2 + time * 0.3, nz * 2 + time * 0.3)
-      const n2 = noise3D(nx * 4 + time * 0.15, ny * 4 + time * 0.15, nz * 4 + time * 0.15)
-      const n3 = noise3D(nx * 8 + time * 0.5, ny * 8 + time * 0.5, nz * 8 + time * 0.5)
-      
-      // Combine noise layers
-      const noiseDisplacement = (n1 * 1.5 + n2 * 0.8 + n3 * 0.4) * 1.2
-      
-      // Breathing/pulsating
-      const pulse = Math.sin(time * 0.5) * 0.4 + Math.sin(time * 0.8) * 0.2
-      
-      // Mouse interaction
-      const dx = baseX - mouse.x * 10
-      const dy = baseY - mouse.y * 10
-      const dist = Math.sqrt(dx * dx + dy * dy + baseZ * baseZ)
-      const mouseEffect = Math.max(0, 1 - dist / 20) * 3
-      
-      // Final radius with all effects
-      const finalRadius = length + noiseDisplacement + pulse + mouseEffect
-      
-      // Set position (always visible, always positive radius)
-      positions[i] = nx * finalRadius
-      positions[i + 1] = ny * finalRadius
-      positions[i + 2] = nz * finalRadius
-    }
-
-    sphereRef.current.geometry.attributes.position.needsUpdate = true
-    
-    // Gentle rotation
-    sphereRef.current.rotation.y = time * 0.08
-    sphereRef.current.rotation.x = Math.sin(time * 0.2) * 0.1
-  })
-
-  return (
-    <points ref={sphereRef} position={[0, 0, -20]}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={particles.length / 3}
-          array={particles}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <pointsMaterial
-        size={isMobile ? 0.05 : 0.04}
-        color="#10b981"
-        transparent
-        opacity={0.8}
-        sizeAttenuation
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </points>
-  )
-}
-
-// Mouse and Touch tracker
-function Scene() {
-  const [mouse, setMouse] = useState({ x: 0, y: 0 })
-  const { viewport } = useThree()
-
-  useFrame((state) => {
-    const x = (state.mouse.x * viewport.width) / 2
-    const y = (state.mouse.y * viewport.height) / 2
-    setMouse({ x, y })
-  })
-
-  return (
-    <>
-      <Starfield />
-      <OrganicSphere mouse={mouse} />
-    </>
-  )
-}
 
 export default function ThreeBackground() {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    // Detect mobile for performance optimization
+    const isMobile = window.innerWidth < 768
+
+    // Scene setup
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: false,
+      alpha: true,
+      powerPreference: 'low-power'
+    })
+
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    const pixelRatio = isMobile ? 1 : Math.min(window.devicePixelRatio, 1.5)
+    renderer.setPixelRatio(pixelRatio)
+    containerRef.current.appendChild(renderer.domElement)
+
+    // Camera position
+    camera.position.z = 5
+
+    // Create simple particle field - reduced count for mobile
+    const particleCount = isMobile ? 500 : 1000
+    const geometry = new THREE.BufferGeometry()
+    const positions = new Float32Array(particleCount * 3)
+    const velocities = new Float32Array(particleCount)
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      positions[i] = (Math.random() - 0.5) * 20
+      positions[i + 1] = (Math.random() - 0.5) * 20
+      positions[i + 2] = (Math.random() - 0.5) * 10
+      velocities[i / 3] = Math.random() * 0.02 + 0.01
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+
+    const material = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: isMobile ? 0.025 : 0.02,
+      transparent: true,
+      opacity: 0.5,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
+    })
+
+    const particles = new THREE.Points(geometry, material)
+    scene.add(particles)
+
+    // Animation
+    let animationId: number
+    const animate = () => {
+      animationId = requestAnimationFrame(animate)
+
+      // Gentle rotation
+      particles.rotation.y += 0.0002
+
+      // Subtle particle movement
+      const positions = geometry.attributes.position.array as Float32Array
+      for (let i = 1; i < positions.length; i += 3) {
+        positions[i] -= velocities[(i - 1) / 3]
+        if (positions[i] < -10) {
+          positions[i] = 10
+        }
+      }
+      geometry.attributes.position.needsUpdate = true
+
+      renderer.render(scene, camera)
+    }
+
+    animate()
+
+    // Handle resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight
+      camera.updateProjectionMatrix()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      cancelAnimationFrame(animationId)
+      renderer.dispose()
+      geometry.dispose()
+      material.dispose()
+      if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
+        containerRef.current.removeChild(renderer.domElement)
+      }
+    }
+  }, [])
+
   return (
-    <div className="fixed inset-0 z-0 touch-none">
-      <Canvas
-        camera={{ position: [0, 0, 30], fov: 75 }}
-        style={{ background: 'transparent', touchAction: 'none' }}
-        dpr={isMobile ? [1, 1.5] : [1, 2]} // Lower pixel ratio on mobile
-        performance={{ min: 0.5 }} // Allow lower FPS on mobile for battery
-        gl={{ 
-          antialias: !isMobile, // Disable antialiasing on mobile for performance
-          alpha: true,
-          powerPreference: isMobile ? 'low-power' : 'high-performance'
-        }}
-      >
-        <ambientLight intensity={0.5} />
-        <fog attach="fog" args={['#0a0a0a', 20, 60]} />
-        <Scene />
-      </Canvas>
-    </div>
+    <div 
+      ref={containerRef} 
+      className="fixed inset-0 z-0 pointer-events-none"
+    />
   )
 }
