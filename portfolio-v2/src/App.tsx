@@ -14,7 +14,6 @@ import SplashScreen from './components/SplashScreen.tsx'
 function App() {
   const [activeSection, setActiveSection] = useState('hero')
   const [showSplash, setShowSplash] = useState(true)
-  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,7 +61,6 @@ function App() {
 
   const handleSplashComplete = () => {
     setShowSplash(false)
-    setIsLoaded(true)
   }
 
   return (
