@@ -81,6 +81,7 @@ function App() {
               sizeRandomness={1}
               cameraDistance={20}
               disableRotation={false}
+              className=""
             />
           </div>
           <div className="relative z-10">
