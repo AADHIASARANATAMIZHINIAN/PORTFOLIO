@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Github, Linkedin, Mail } from 'lucide-react'
 import { motion } from 'framer-motion'
+import Orb from './Orb'
+import Letter3D from './Letter3D'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -75,36 +77,56 @@ export default function Hero() {
       id="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16"
     >
-      {/* Subtle Gradient Overlay - Very transparent */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-transparent"></div>
-      
-      {/* Animated Grid - Very subtle */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.005)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.005)_1px,transparent_1px)] bg-[size:100px_100px]"></div>
-
       <motion.div 
         className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="text-center space-y-8">
-          {/* Name with shine effect */}
-          <motion.div className="mb-6" variants={itemVariants}>
-            <motion.p 
-              className="text-sm md:text-base font-medium text-gray-400 uppercase tracking-[0.3em] mb-2"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              Portfolio of
-            </motion.p>
-            <motion.h2 
-              className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight text-white relative inline-block shine-effect"
-              variants={titleVariants}
-            >
-              AADHIASARANA T
-            </motion.h2>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+          {/* Left side - Orb Profile */}
+          <motion.div 
+            className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex-shrink-0"
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Orb Background */}
+            <div className="absolute inset-0 z-0">
+              <Orb 
+                hue={0} 
+                hoverIntensity={0.2} 
+                rotateOnHover={true}
+              />
+            </div>
+            
+            {/* 3D Neural Network */}
+            <div className="absolute inset-0 z-10 flex items-center justify-center">
+              <div className="w-full h-full">
+                <Letter3D />
+              </div>
+            </div>
           </motion.div>
+
+          {/* Right side - Content */}
+          <div className="text-center lg:text-left space-y-8 flex-1">
+            {/* Name with shine effect */}
+            <motion.div className="mb-6" variants={itemVariants}>
+              <motion.p 
+                className="text-sm md:text-base font-medium text-gray-400 uppercase tracking-[0.3em] mb-2"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                Portfolio of
+              </motion.p>
+              <motion.h2 
+                className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight text-white relative inline-block shine-effect"
+                variants={titleVariants}
+              >
+                AADHIASARANA T
+              </motion.h2>
+            </motion.div>
 
           {/* Main Title with shimmer effect */}
           <motion.h1 
@@ -186,7 +208,7 @@ export default function Hero() {
 
           {/* Social Links */}
           <motion.div 
-            className="flex items-center justify-center gap-6 pt-12"
+            className="flex items-center justify-center lg:justify-start gap-6 pt-12"
             variants={itemVariants}
           >
             {[
@@ -214,6 +236,7 @@ export default function Hero() {
               </motion.a>
             ))}
           </motion.div>
+        </div>
         </div>
       </motion.div>
     </section>

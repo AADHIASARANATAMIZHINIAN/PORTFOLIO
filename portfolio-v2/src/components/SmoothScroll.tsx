@@ -1,7 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Lenis from 'lenis'
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const lenisRef = useRef<Lenis | null>(null)
+
   useEffect(() => {
     // Disable smooth scroll on mobile for better performance
     const isMobile = window.innerWidth < 768
@@ -18,19 +20,28 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       wheelMultiplier: 0.8,
       touchMultiplier: 1.5,
       infinite: false,
+      syncTouch: false,
+      prevent: (node) => node.classList.contains('no-smooth-scroll')
     })
 
+    lenisRef.current = lenis
+
+    let rafId: number
     function raf(time: number) {
       lenis.raf(time)
-      requestAnimationFrame(raf)
+      rafId = requestAnimationFrame(raf)
     }
 
-    requestAnimationFrame(raf)
+    rafId = requestAnimationFrame(raf)
 
     return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId)
+      }
       lenis.destroy()
+      lenisRef.current = null
     }
   }, [])
 
-  return <>{children}</>
+  return <div style={{ willChange: 'auto' }}>{children}</div>
 }

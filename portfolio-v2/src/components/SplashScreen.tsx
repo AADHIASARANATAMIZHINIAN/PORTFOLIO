@@ -122,19 +122,108 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         ))}
       </div>
 
-      {/* Expanding geometric shapes */}
+      {/* Rotating hexagon loader */}
       <motion.div
-        initial={{ scale: 0, opacity: 0.8, rotate: 0 }}
-        animate={{ scale: 50, opacity: 0, rotate: 180 }}
+        initial={{ scale: 0, rotate: 0, opacity: 0 }}
+        animate={{ 
+          scale: [0, 1.2, 1],
+          rotate: 360,
+          opacity: [0, 1, 1]
+        }}
+        transition={{
+          duration: 1.5,
+          delay: 2,
+          ease: [0.6, 0.05, 0.01, 0.9]
+        }}
+        className="absolute top-1/2 left-1/2 w-32 h-32"
+        style={{ 
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: 'linear'
+          }}
+          className="w-full h-full border-4 border-white"
+          style={{ 
+            clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
+          }}
+        />
+      </motion.div>
+      
+      {/* Inner rotating hexagon */}
+      <motion.div
+        initial={{ scale: 0, rotate: 0, opacity: 0 }}
+        animate={{ 
+          scale: [0, 1.2, 1],
+          rotate: -360,
+          opacity: [0, 1, 1]
+        }}
+        transition={{
+          duration: 1.5,
+          delay: 2.2,
+          ease: [0.6, 0.05, 0.01, 0.9]
+        }}
+        className="absolute top-1/2 left-1/2 w-20 h-20"
+        style={{ 
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: 'linear'
+          }}
+          className="w-full h-full border-2 border-white opacity-50"
+          style={{ 
+            clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
+          }}
+        />
+      </motion.div>
+      
+      {/* Pulsing corner accents */}
+      {[0, 90, 180, 270].map((rotation, i) => (
+        <motion.div
+          key={i}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ 
+            scale: [0, 1, 1, 0],
+            opacity: [0, 1, 1, 0]
+          }}
+          transition={{
+            duration: 2,
+            delay: 2.5 + (i * 0.1),
+            ease: 'easeInOut'
+          }}
+          className="absolute top-1/2 left-1/2"
+          style={{ 
+            transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-80px)`,
+          }}
+        >
+          <div className="w-3 h-3 bg-white" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }} />
+        </motion.div>
+      ))}
+      
+      {/* Expanding ring */}
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ 
+          scale: [0, 80],
+          opacity: [0.5, 0]
+        }}
         transition={{
           duration: 2.5,
           delay: 3,
           ease: [0.65, 0, 0.35, 1]
         }}
-        className="absolute top-1/2 left-1/2 w-8 h-8 bg-white"
+        className="absolute top-1/2 left-1/2 w-8 h-8 rounded-full border border-white"
         style={{ 
           transform: 'translate(-50%, -50%)',
-          clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'
         }}
       />
 

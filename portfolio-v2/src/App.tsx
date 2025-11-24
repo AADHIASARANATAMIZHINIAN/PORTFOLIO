@@ -7,7 +7,7 @@ import Skills from './components/Skills.tsx'
 import Experience from './components/Experience.tsx'
 import Contact from './components/Contact.tsx'
 import Footer from './components/Footer.tsx'
-import ThreeBackground from './components/ThreeBackground.tsx'
+import Particles from './components/Particles.tsx'
 import SmoothScroll from './components/SmoothScroll.tsx'
 import SplashScreen from './components/SplashScreen.tsx'
 
@@ -68,18 +68,33 @@ function App() {
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       
       <SmoothScroll>
-        <div className="min-h-screen text-white font-body">
-          <ThreeBackground />
-          <Navigation activeSection={activeSection} />
-          <main>
-            <Hero />
-            <About />
-            <Projects />
-            <Skills />
-            <Experience />
-            <Contact />
-          </main>
-          <Footer />
+        <div className="relative min-h-screen text-white font-body bg-[#0a0a0a]">
+          {/* Particle background */}
+          <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">
+            <Particles 
+              particleCount={300}
+              particleColors={['#9c43ff', '#4cc9f0', '#ffffff']}
+              particleSpread={10}
+              speed={0.5}
+              alphaParticles={true}
+              particleBaseSize={80}
+              sizeRandomness={1}
+              cameraDistance={20}
+              disableRotation={false}
+            />
+          </div>
+          <div className="relative z-10">
+            <Navigation activeSection={activeSection} />
+            <main>
+              <Hero />
+              <About />
+              <Projects />
+              <Skills />
+              <Experience />
+              <Contact />
+            </main>
+            <Footer />
+          </div>
         </div>
       </SmoothScroll>
     </>
