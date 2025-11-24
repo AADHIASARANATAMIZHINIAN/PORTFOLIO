@@ -75,18 +75,18 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 px-4 sm:px-6"
     >
       <motion.div 
-        className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20"
+        className="relative z-10 max-w-7xl mx-auto w-full py-12 sm:py-16 md:py-20"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-10 lg:gap-16">
           {/* Left side - Orb Profile */}
           <motion.div 
-            className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex-shrink-0"
+            className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-96 lg:h-96 flex-shrink-0"
             variants={itemVariants}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
@@ -109,11 +109,11 @@ export default function Hero() {
           </motion.div>
 
           {/* Right side - Content */}
-          <div className="text-center lg:text-left space-y-8 flex-1">
+          <div className="text-center lg:text-left space-y-6 sm:space-y-8 flex-1 w-full">
             {/* Name with shine effect */}
-            <motion.div className="mb-6" variants={itemVariants}>
+            <motion.div className="mb-4 sm:mb-6" variants={itemVariants}>
               <motion.p 
-                className="text-sm md:text-base font-medium text-gray-400 uppercase tracking-[0.3em] mb-2"
+                className="text-xs sm:text-sm md:text-base font-medium text-gray-400 uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-2"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
@@ -121,7 +121,7 @@ export default function Hero() {
                 Portfolio of
               </motion.p>
               <motion.h2 
-                className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight text-white relative inline-block shine-effect"
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-display font-bold tracking-tight text-white relative inline-block shine-effect"
                 variants={titleVariants}
               >
                 AADHIASARANA T
@@ -130,11 +130,11 @@ export default function Hero() {
 
           {/* Main Title with shimmer effect */}
           <motion.h1 
-            className="text-3xl xs:text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight leading-[1.1]"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold tracking-tight leading-[1.1]"
             variants={itemVariants}
           >
             <motion.span 
-              className="block mb-3 text-white shine-effect"
+              className="block mb-2 sm:mb-3 text-white shine-effect"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
@@ -151,10 +151,10 @@ export default function Hero() {
 
           {/* Subtitle with Typing Effect */}
           <motion.div 
-            className="text-xl xs:text-2xl md:text-3xl lg:text-4xl font-light text-gray-300 h-12 flex items-center justify-center"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-light text-gray-300 min-h-[2.5rem] sm:min-h-[3rem] flex items-center justify-center lg:justify-start"
             variants={itemVariants}
           >
-            <span className="font-mono shine-effect">{displayText}</span>
+            <span className="font-mono shine-effect break-words">{displayText}</span>
             <motion.span 
               className="ml-1"
               animate={{ opacity: [1, 0] }}

@@ -14,8 +14,16 @@ import SplashScreen from './components/SplashScreen.tsx'
 function App() {
   const [activeSection, setActiveSection] = useState('hero')
   const [showSplash, setShowSplash] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    // Detect mobile devices
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
     const handleScroll = () => {
       const sections = document.querySelectorAll('section[id]')
       const scrollY = window.scrollY
@@ -55,6 +63,7 @@ function App() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', checkMobile)
       animatedElements.forEach((el) => observer.unobserve(el))
     }
   }, [])
@@ -69,18 +78,18 @@ function App() {
       
       <SmoothScroll>
         <div className="relative min-h-screen text-white font-body bg-[#0a0a0a]">
-          {/* Particle background */}
+          {/* Particle background - optimized for mobile */}
           <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">
             <Particles 
-              particleCount={300}
+              particleCount={isMobile ? 150 : 300}
               particleColors={['#9c43ff', '#4cc9f0', '#ffffff']}
               particleSpread={10}
-              speed={0.5}
+              speed={isMobile ? 0.3 : 0.5}
               alphaParticles={true}
-              particleBaseSize={80}
+              particleBaseSize={isMobile ? 60 : 80}
               sizeRandomness={1}
               cameraDistance={20}
-              disableRotation={false}
+              disableRotation={isMobile}
               className=""
             />
           </div>
