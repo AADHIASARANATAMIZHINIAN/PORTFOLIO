@@ -21,7 +21,6 @@ export default function WaveBackground() {
 
     // Create wave geometry
     const geometry = new THREE.PlaneGeometry(50, 50, 50, 50)
-    const positions = geometry.attributes.position.array
 
     // Create gradient material with purple to cyan
     const material = new THREE.ShaderMaterial({
