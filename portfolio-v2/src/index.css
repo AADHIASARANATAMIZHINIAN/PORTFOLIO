@@ -20,6 +20,15 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Smooth scroll active - hide native scroll for Lenis */
+  .smooth-scroll-active body {
+    overflow: hidden;
+  }
+
+  .smooth-scroll-active html {
+    overflow: hidden;
+  }
+
   /* Optimize for mobile touch */
   * {
     -webkit-tap-highlight-color: transparent;

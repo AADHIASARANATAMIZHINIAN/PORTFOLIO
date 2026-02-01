@@ -3,6 +3,7 @@ import Lenis from 'lenis'
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Disable smooth scroll on mobile for better performance
@@ -13,6 +14,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
     
     const lenis = new Lenis({
+      wrapper: wrapperRef.current!,
+      content: wrapperRef.current!,
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
@@ -43,5 +46,5 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
   }, [])
 
-  return <div>{children}</div>
+  return <div ref={wrapperRef} style={{ height: '100vh', overflow: 'hidden' }}>{children}</div>
 }

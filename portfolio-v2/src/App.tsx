@@ -112,7 +112,7 @@ function App() {
         </div>
       ) : (
         <SmoothScroll>
-          <div className="relative min-h-screen text-white font-body bg-[#0a0a0a]">
+          <div className="relative min-h-screen text-white font-body bg-[#0a0a0a] smooth-scroll-active">
             {/* Particle background - optimized for desktop */}
             <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">
               <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
