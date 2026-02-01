@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { Github, Linkedin, Mail } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Orb from './Orb'
-import Letter3D from './Letter3D'
+
+const Letter3D = lazy(() => import('./Letter3D'))
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -75,7 +76,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 px-4 sm:px-6"
+      className="min-h-[100dvh] flex items-center justify-center relative overflow-hidden pt-16 px-4 sm:px-6"
     >
       <motion.div 
         className="relative z-10 max-w-7xl mx-auto w-full py-12 sm:py-16 md:py-20"
@@ -103,7 +104,9 @@ export default function Hero() {
             {/* 3D Neural Network */}
             <div className="absolute inset-0 z-10 flex items-center justify-center">
               <div className="w-full h-full">
-                <Letter3D />
+                <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
+                  <Letter3D />
+                </Suspense>
               </div>
             </div>
           </motion.div>

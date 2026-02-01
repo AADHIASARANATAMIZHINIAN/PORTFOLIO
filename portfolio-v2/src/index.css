@@ -5,11 +5,19 @@
 @layer base {
   body {
     @apply antialiased;
-    overscroll-behavior: none;
+    overscroll-behavior-y: contain; /* Allow horizontal overscroll but contain vertical */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    min-height: 100vh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Performance optimizations */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-  
+
   /* Optimize for mobile touch */
   * {
     -webkit-tap-highlight-color: transparent;
@@ -20,7 +28,9 @@
   html {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: none;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   
   /* Prevent repaints and flashing */

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import Navigation from './components/Navigation.tsx'
 import Hero from './components/Hero.tsx'
 import About from './components/About.tsx'
@@ -7,9 +7,10 @@ import Skills from './components/Skills.tsx'
 import Experience from './components/Experience.tsx'
 import Contact from './components/Contact.tsx'
 import Footer from './components/Footer.tsx'
-import Particles from './components/Particles.tsx'
 import SmoothScroll from './components/SmoothScroll.tsx'
 import SplashScreen from './components/SplashScreen.tsx'
+
+const Particles = lazy(() => import('./components/Particles.tsx'))
 
 function App() {
   const [activeSection, setActiveSection] = useState('hero')
@@ -77,21 +78,23 @@ function App() {
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       
       <SmoothScroll>
-        <div className="relative min-h-screen text-white font-body bg-[#0a0a0a]">
+        <div className="relative min-h-[100dvh] text-white font-body bg-[#0a0a0a]">
           {/* Particle background - optimized for mobile */}
           <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">
-            <Particles 
-              particleCount={isMobile ? 150 : 300}
-              particleColors={['#9c43ff', '#4cc9f0', '#ffffff']}
-              particleSpread={10}
-              speed={isMobile ? 0.3 : 0.5}
-              alphaParticles={true}
-              particleBaseSize={isMobile ? 60 : 80}
-              sizeRandomness={1}
-              cameraDistance={20}
-              disableRotation={isMobile}
-              className=""
-            />
+            <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
+              <Particles 
+                particleCount={isMobile ? 150 : 300}
+                particleColors={['#9c43ff', '#4cc9f0', '#ffffff']}
+                particleSpread={10}
+                speed={isMobile ? 0.3 : 0.5}
+                alphaParticles={true}
+                particleBaseSize={isMobile ? 60 : 80}
+                sizeRandomness={1}
+                cameraDistance={20}
+                disableRotation={isMobile}
+                className=""
+              />
+            </Suspense>
           </div>
           <div className="relative z-10">
             <Navigation activeSection={activeSection} />
