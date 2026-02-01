@@ -5,14 +5,15 @@
 @layer base {
   body {
     @apply antialiased;
-    /* Allow normal scrolling behavior on mobile */
+    /* Allow normal scrolling behavior */
     overscroll-behavior: auto;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     min-height: 100vh;
-    height: auto;
-    /* Ensure scrolling works */
-    overflow: visible;
+    height: 100%;
+    /* CRITICAL: Enable vertical scrolling */
+    overflow-y: scroll;
+    overflow-x: hidden;
     /* Performance optimizations */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -31,22 +32,27 @@
       /* Allow normal touch scrolling */
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: auto;
+      /* Force scrolling */
+      overflow-y: scroll;
+      overflow-x: hidden;
     }
     
     html {
       /* Ensure html allows scrolling */
-      overflow: auto;
+      overflow-y: scroll;
+      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
     }
   }
   
-  /* Smooth scrolling for mobile */
+  /* Allow scrolling */
   html {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     height: 100%;
-    /* Allow normal scrolling */
-    overflow: auto;
+    /* CRITICAL: Enable vertical scrolling */
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
   
   /* Prevent repaints and flashing */

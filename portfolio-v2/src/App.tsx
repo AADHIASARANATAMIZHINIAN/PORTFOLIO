@@ -77,7 +77,8 @@ function App() {
     <>
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       
-      <SmoothScroll>
+      {isMobile ? (
+        /* Native scrolling on mobile - no SmoothScroll */
         <div className="relative min-h-screen text-white font-body bg-[#0a0a0a]">
           {/* Particle background - optimized for mobile */}
           <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">
@@ -109,7 +110,41 @@ function App() {
             <Footer />
           </div>
         </div>
-      </SmoothScroll>
+      ) : (
+        <SmoothScroll>
+          <div className="relative min-h-screen text-white font-body bg-[#0a0a0a]">
+            {/* Particle background - optimized for desktop */}
+            <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">
+              <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
+                <Particles 
+                  particleCount={300}
+                  particleColors={['#9c43ff', '#4cc9f0', '#ffffff']}
+                  particleSpread={10}
+                  speed={0.5}
+                  alphaParticles={true}
+                  particleBaseSize={80}
+                  sizeRandomness={1}
+                  cameraDistance={20}
+                  disableRotation={false}
+                  className=""
+                />
+              </Suspense>
+            </div>
+            <div className="relative z-10">
+              <Navigation activeSection={activeSection} />
+              <main>
+                <Hero />
+                <About />
+                <Projects />
+                <Skills />
+                <Experience />
+                <Contact />
+              </main>
+              <Footer />
+            </div>
+          </div>
+        </SmoothScroll>
+      )}
     </>
   )
 }
