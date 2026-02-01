@@ -145,11 +145,4 @@ export default {
   	}
   },
   plugins: [require("tailwindcss-animate")],
-  // Performance optimizations
-  future: {
-    hoverOnlyWhenSupported: true,
-  },
-  experimental: {
-    optimizeUniversalDefaults: true,
-  },
 }

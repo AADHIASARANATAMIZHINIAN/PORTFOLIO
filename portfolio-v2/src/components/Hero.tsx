@@ -76,7 +76,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-[100dvh] flex items-center justify-center relative overflow-hidden pt-16 px-4 sm:px-6"
+      className="min-h-[100dvh] flex items-center justify-center relative pt-16 px-4 sm:px-6"
     >
       <motion.div 
         className="relative z-10 max-w-7xl mx-auto w-full py-12 sm:py-16 md:py-20"

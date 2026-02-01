@@ -78,7 +78,7 @@ function App() {
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
       
       <SmoothScroll>
-        <div className="relative min-h-[100dvh] text-white font-body bg-[#0a0a0a]">
+        <div className="relative min-h-screen text-white font-body bg-[#0a0a0a]">
           {/* Particle background - optimized for mobile */}
           <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">
             <Suspense fallback={<div className="w-full h-full bg-transparent" />}>

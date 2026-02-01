@@ -43,5 +43,5 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
   }, [])
 
-  return <div style={{ willChange: 'auto' }}>{children}</div>
+  return <div>{children}</div>
 }
