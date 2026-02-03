@@ -79,9 +79,9 @@ export default function Contact() {
               <div className="space-y-6">
                 <a
                   href="mailto:aadhiasarana12@gmail.com"
-                  className="flex items-center gap-4 text-lg hover:text-gray-300 transition-colors group"
+                  className="flex items-center gap-4 text-lg hover:text-cyan-300 transition-colors group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center group-hover:from-cyan-500/40 group-hover:to-purple-500/40 transition-all border border-cyan-500/30 group-hover:border-purple-500/50">
                     <Mail className="w-5 h-5" />
                   </div>
                   <span>aadhiasarana12@gmail.com</span>
@@ -91,9 +91,9 @@ export default function Contact() {
                   href="https://www.linkedin.com/in/aadhiasarana-t-529641328"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 text-lg hover:text-gray-300 transition-colors group"
+                  className="flex items-center gap-4 text-lg hover:text-cyan-300 transition-colors group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center group-hover:from-cyan-500/40 group-hover:to-purple-500/40 transition-all border border-cyan-500/30 group-hover:border-purple-500/50">
                     <Linkedin className="w-5 h-5" />
                   </div>
                   <span>LinkedIn Profile</span>
@@ -103,9 +103,9 @@ export default function Contact() {
                   href="https://github.com/AADHIASARANATAMIZHINIAN"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 text-lg hover:text-gray-300 transition-colors group"
+                  className="flex items-center gap-4 text-lg hover:text-cyan-300 transition-colors group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center group-hover:from-cyan-500/40 group-hover:to-purple-500/40 transition-all border border-cyan-500/30 group-hover:border-purple-500/50">
                     <Github className="w-5 h-5" />
                   </div>
                   <span>GitHub Profile</span>
@@ -114,12 +114,14 @@ export default function Contact() {
             </div>
 
             {/* Availability Badge */}
-            <div className="bg-dark-800/50 border border-white/10 rounded-2xl p-8">
+            <div className="bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-transparent backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-8 hover:border-purple-500/50 transition-all shadow-lg group">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="font-semibold">Available for Work</span>
+                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-400 to-green-400 animate-pulse"></div>
+                <span className="font-semibold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent group-hover:from-cyan-200 group-hover:to-purple-200">
+                  Available for Work
+                </span>
               </div>
-              <p className="text-gray-400">
+              <p className="text-gray-400 group-hover:text-gray-300 transition-colors">
                 I'm currently open to new opportunities and exciting projects. Let's
                 build something amazing together!
               </p>

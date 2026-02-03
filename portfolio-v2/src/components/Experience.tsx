@@ -55,43 +55,46 @@ export default function Experience() {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Vertical Line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-white/10 transform md:-translate-x-1/2"></div>
+          {/* Vertical Line - hidden on mobile for proper display */}
+          <div className="hidden md:block absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-white/10 transform md:-translate-x-1/2"></div>
 
-          <div className="space-y-16">
+          <div className="space-y-12 md:space-y-16">
             {experiences.map((exp, index) => (
               <div
                 key={index}
                 className={`animate-on-scroll relative ${
-                  index % 2 === 0 ? 'md:pr-1/2 md:text-right' : 'md:pl-1/2 md:ml-12'
+                  index % 2 === 0 ? 'md:pr-1/2 md:text-right md:flex md:justify-end' : 'md:pl-1/2'
                 }`}
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 {/* Timeline Dot */}
                 <div
-                  className={`absolute top-0 w-4 h-4 bg-white rounded-full border-4 border-dark-900 ${
+                  className={`absolute top-0 w-4 h-4 bg-gradient-to-r from-purple-400 to-cyan-400 rounded-full border-4 border-dark-900 md:border-dark-900/50 ${
                     index % 2 === 0
-                      ? 'left-0 md:left-auto md:right-0 md:-mr-2'
-                      : 'left-0 md:-ml-2'
+                      ? 'left-2 md:left-auto md:right-0 md:-mr-2'
+                      : 'left-2 md:-ml-2'
                   }`}
+                  style={{ transform: 'translateX(-50%)', zIndex: 10 }}
                 ></div>
 
                 {/* Content Card */}
-                <div className="ml-8 md:ml-0 bg-dark-900/20 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300 hover:transform hover:-translate-y-1 hover:bg-dark-900/30">
+                <div className="ml-10 md:ml-0 md:w-1/2 bg-gradient-to-br from-white/5 via-white/2 to-transparent backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 hover:border-white/30 transition-all duration-300 hover:transform hover:-translate-y-2 hover:bg-gradient-to-br hover:from-white/10 hover:via-white/5 hover:to-transparent shadow-xl hover:shadow-2xl group">
                   <div className="space-y-4">
                     <div>
-                      <div className="text-sm text-gray-500 font-semibold uppercase tracking-wider mb-2">
+                      <div className="text-sm text-purple-400 font-bold uppercase tracking-widest mb-2">
                         {exp.duration}
                       </div>
-                      <h3 className="text-2xl font-bold mb-1">{exp.role}</h3>
-                      <div className="text-lg text-gray-400">{exp.company}</div>
+                      <h3 className="text-2xl font-bold mb-1 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                        {exp.role}
+                      </h3>
+                      <div className="text-lg text-cyan-400/80 group-hover:text-cyan-300 transition-colors">{exp.company}</div>
                     </div>
 
                     <ul className="space-y-3">
                       {exp.description.map((desc, i) => (
-                        <li key={i} className="text-gray-400 flex items-start gap-3">
-                          <span className="w-1.5 h-1.5 rounded-full bg-white/40 mt-2 flex-shrink-0"></span>
-                          <span>{desc}</span>
+                        <li key={i} className="text-gray-300 flex items-start gap-3 group/item">
+                          <span className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-400 to-cyan-400 mt-2 flex-shrink-0 group-hover/item:scale-125 transition-transform"></span>
+                          <span className="group-hover/item:text-gray-100 transition-colors">{desc}</span>
                         </li>
                       ))}
                     </ul>

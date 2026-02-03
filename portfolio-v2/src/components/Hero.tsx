@@ -184,24 +184,28 @@ export default function Hero() {
           >
             <motion.a
               href="#projects"
-              className="group px-8 py-4 bg-white text-black rounded-lg font-semibold"
-              whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(255,255,255,0.2)" }}
+              className="group relative px-8 py-4 bg-gradient-to-r from-cyan-400 via-cyan-300 to-cyan-400 text-black rounded-lg font-bold overflow-hidden shadow-xl glow-effect"
+              whileHover={{ scale: 1.08, boxShadow: "0 25px 50px rgba(76, 201, 240, 0.4)" }}
               whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.3 }}
             >
-              View My Work
-              <motion.span 
-                className="inline-block ml-2"
-                initial={{ x: 0 }}
-                whileHover={{ x: 5 }}
-              >
-                →
-              </motion.span>
+              <span className="relative z-10 flex items-center gap-2">
+                View My Work
+                <motion.span 
+                  className="inline-block"
+                  initial={{ x: 0 }}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  →
+                </motion.span>
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
             </motion.a>
             <motion.a
               href="#contact"
-              className="px-8 py-4 border border-white/20 rounded-lg font-semibold backdrop-blur-sm"
-              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)", borderColor: "rgba(255,255,255,0.4)" }}
+              className="px-8 py-4 border border-white/20 rounded-lg font-semibold backdrop-blur-sm hover:border-cyan-400 hover:border-opacity-80 hover:shadow-lg hover:shadow-cyan-400/20 transition-all duration-300"
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(76, 201, 240, 0.05)" }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
             >

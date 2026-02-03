@@ -89,16 +89,21 @@ export default function About() {
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
-              className="group"
+              className="group relative"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: false }}
               transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -2 }}
+              whileHover={{ scale: 1.08, y: -5 }}
             >
-              <div className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold shine-effect">{stat.value}</div>
-              <div className="text-sm text-gray-500 uppercase tracking-wider mt-2 group-hover:text-gray-400 transition-colors">
-                {stat.label}
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg" />
+              <div className="relative p-4 rounded-lg border border-white/10 group-hover:border-white/20 transition-all bg-white/2 backdrop-blur">
+                <div className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-cyan-200 group-hover:to-purple-300 transition-all">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-gray-500 uppercase tracking-wider mt-2 group-hover:text-cyan-400 transition-colors">
+                  {stat.label}
+                </div>
               </div>
             </motion.div>
           ))}
@@ -113,16 +118,18 @@ export default function About() {
           transition={{ duration: 0.6, delay: 0.8 }}
         >
           <motion.div 
-            className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-lg border border-white/10 rounded-full px-6 py-3"
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)", borderColor: "rgba(255,255,255,0.2)" }}
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-cyan-500/5 backdrop-blur-lg border border-cyan-500/30 rounded-full px-6 py-3 hover:border-purple-500/50 transition-all shadow-lg"
+            whileHover={{ scale: 1.08, backgroundColor: "rgba(34, 211, 238, 0.15)", borderColor: "rgba(168, 85, 247, 0.5)" }}
             transition={{ duration: 0.3 }}
           >
             <motion.div 
-              className="w-3 h-3 rounded-full bg-green-500"
-              animate={{ scale: [1, 1.2, 1] }}
+              className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-400 to-green-400"
+              animate={{ scale: [1, 1.3, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <span className="font-semibold">Open to Internships & Collaborations</span>
+            <span className="font-semibold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent">
+              Open to Internships & Collaborations
+            </span>
           </motion.div>
         </motion.div>
       </div>

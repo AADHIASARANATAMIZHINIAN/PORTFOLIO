@@ -68,24 +68,28 @@ export default function Skills() {
           {categories.map((category, index) => (
             <motion.div
               key={category.title}
-              className="space-y-4"
+              className="space-y-4 group"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -5 }}
             >
-              <h3 className="text-xl font-bold">{category.title}</h3>
+              <h3 className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:to-purple-300 transition-all">
+                {category.title}
+              </h3>
               <ul className="space-y-2">
                 {category.items.map((item, i) => (
                   <motion.li 
                     key={item} 
-                    className="text-gray-400 flex items-center gap-2 hover:text-gray-300 transition-colors"
+                    className="text-gray-400 flex items-center gap-2 hover:text-cyan-300 transition-colors group/item cursor-default"
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: false }}
                     transition={{ duration: 0.4, delay: index * 0.1 + i * 0.05 }}
+                    whileHover={{ x: 5 }}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-purple-400 group-hover/item:scale-150 transition-transform"></span>
                     {item}
                   </motion.li>
                 ))}
@@ -103,8 +107,8 @@ export default function Skills() {
           transition={{ duration: 0.8 }}
         >
           <motion.div 
-            className="bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-12 hover:bg-dark-800/30 transition-all duration-300"
-            whileHover={{ scale: 1.01, borderColor: "rgba(255,255,255,0.2)" }}
+            className="bg-gradient-to-br from-white/5 via-white/2 to-purple-500/5 backdrop-blur-xl border border-white/15 rounded-3xl p-6 md:p-12 hover:border-white/30 transition-all duration-300 shadow-2xl"
+            whileHover={{ scale: 1.02, borderColor: "rgba(255,255,255,0.3)", boxShadow: "0 20px 50px rgba(139,92,246,0.15)" }}
           >
             <div className="grid md:grid-cols-3 gap-6 md:gap-8 text-center">
               {[
@@ -118,10 +122,13 @@ export default function Skills() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -3 }}
+                  whileHover={{ y: -8, scale: 1.05 }}
+                  className="group cursor-default"
                 >
-                  <div className="text-3xl md:text-4xl font-bold mb-2">{item.title}</div>
-                  <div className="text-gray-400">{item.description}</div>
+                  <div className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-cyan-300 via-white to-purple-300 bg-clip-text text-transparent group-hover:from-cyan-200 group-hover:to-purple-200 transition-all">
+                    {item.title}
+                  </div>
+                  <div className="text-gray-400 group-hover:text-gray-300 transition-colors">{item.description}</div>
                 </motion.div>
               ))}
             </div>
