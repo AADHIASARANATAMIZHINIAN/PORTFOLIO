@@ -54,7 +54,7 @@ export const FlipCard = ({
             <div>
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-lg md:text-xl font-bold leading-tight flex-1 pr-4">{title}</h3>
-                <span className="text-xs md:text-sm text-purple-400 font-semibold whitespace-nowrap">{year}</span>
+                <span className="text-xs md:text-sm text-gray-400 font-semibold whitespace-nowrap">{year}</span>
               </div>
               <p className="text-sm md:text-base text-gray-400 line-clamp-3 leading-relaxed">
                 {description}

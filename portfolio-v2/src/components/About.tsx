@@ -27,7 +27,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <motion.h2 
-              className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight shine-effect"
+              className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
@@ -48,7 +48,7 @@ export default function About() {
               className="hover:text-gray-300 transition-colors duration-300"
               whileHover={{ x: 5 }}
             >
-              Hey there! 👋 I'm <span className="text-white font-semibold shine-effect">AADHIASARANA T</span>, an AI & Data Science student 
+              Hey there! 👋 I'm <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent font-semibold">AADHIASARANA T</span>, an AI & Data Science student 
               on a mission to explore the intersection of technology and creativity. My journey into tech started 
               with curiosity, and it's now fueled by passion for building things that matter.
             </motion.p>
@@ -96,12 +96,12 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
               whileHover={{ scale: 1.08, y: -5 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg" />
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-gray-300/10 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg" />
               <div className="relative p-4 rounded-lg border border-white/10 group-hover:border-white/20 transition-all bg-white/2 backdrop-blur">
-                <div className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-cyan-200 group-hover:to-purple-300 transition-all">
+                <div className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-300 transition-all">
                   {stat.value}
                 </div>
-                <div className="text-sm text-gray-500 uppercase tracking-wider mt-2 group-hover:text-cyan-400 transition-colors">
+                <div className="text-sm text-gray-500 uppercase tracking-wider mt-2 group-hover:text-gray-300 transition-colors">
                   {stat.label}
                 </div>
               </div>
@@ -118,16 +118,16 @@ export default function About() {
           transition={{ duration: 0.6, delay: 0.8 }}
         >
           <motion.div 
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-cyan-500/5 backdrop-blur-lg border border-cyan-500/30 rounded-full px-6 py-3 hover:border-purple-500/50 transition-all shadow-lg"
-            whileHover={{ scale: 1.08, backgroundColor: "rgba(34, 211, 238, 0.15)", borderColor: "rgba(168, 85, 247, 0.5)" }}
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-white/10 via-gray-300/10 to-white/5 backdrop-blur-lg border border-white/30 rounded-full px-6 py-3 hover:border-gray-300/50 transition-all shadow-lg"
+            whileHover={{ scale: 1.08, backgroundColor: "rgba(255, 255, 255, 0.15)", borderColor: "rgba(200, 200, 200, 0.5)" }}
             transition={{ duration: 0.3 }}
           >
             <motion.div 
-              className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-400 to-green-400"
+              className="w-3 h-3 rounded-full bg-gradient-to-r from-white to-gray-300"
               animate={{ scale: [1, 1.3, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <span className="font-semibold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent">
+            <span className="font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               Open to Internships & Collaborations
             </span>
           </motion.div>

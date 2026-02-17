@@ -58,52 +58,66 @@ export default function Footer() {
   }, [])
 
   return (
-    <footer className="relative py-16 border-t border-white/5">
+    <footer className="relative py-16 border-t border-white/5 bg-gradient-to-b from-dark-900/50 to-dark-900">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Left - Branding */}
-          <div className="space-y-4">
-            <h3 className="text-2xl font-display font-bold">AADHIASARANA T</h3>
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-2xl font-display font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">AADHIASARANA T</h3>
             <p className="text-gray-400">
               AI & Data Science student exploring AI/ML, web development, and building cool stuff! 🚀
             </p>
             <div className="flex items-center gap-4">
-              <a
+              <motion.a
                 href="https://github.com/AADHIASARANATAMIZHINIAN"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
                 aria-label="GitHub"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <Github className="w-5 h-5" />
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href="https://www.linkedin.com/in/aadhiasarana-t-529641328"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
                 aria-label="LinkedIn"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <Linkedin className="w-5 h-5" />
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href="https://www.instagram.com/__aadhiasarana_"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
                 aria-label="Instagram"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <Instagram className="w-5 h-5" />
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href="mailto:aadhiasarana12@gmail.com"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
                 aria-label="Email"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <Mail className="w-5 h-5" />
-              </a>
+              </motion.a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Middle & Right - Rotating Quotes */}
           <div className="md:col-span-2 flex items-center justify-center">

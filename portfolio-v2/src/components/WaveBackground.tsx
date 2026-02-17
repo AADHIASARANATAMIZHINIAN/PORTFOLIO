@@ -22,12 +22,12 @@ export default function WaveBackground() {
     // Create wave geometry
     const geometry = new THREE.PlaneGeometry(50, 50, 50, 50)
 
-    // Create gradient material with purple to cyan
+    // Create gradient material with white to gray
     const material = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
-        colorA: { value: new THREE.Color('#9c43ff') }, // Purple
-        colorB: { value: new THREE.Color('#4cc9f0') }, // Cyan
+        colorA: { value: new THREE.Color('#ffffff') }, // White
+        colorB: { value: new THREE.Color('#d0d0d0') }, // Gray
       },
       vertexShader: `
         uniform float time;

@@ -24,40 +24,55 @@ export default function Navigation({ activeSection }: NavigationProps) {
 
   return (
     <>
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/40 backdrop-blur-md border-b border-white/5">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-white/5">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a
+          <motion.a
             href="#hero"
-            className="text-lg md:text-xl font-display font-bold tracking-tight hover:opacity-80 transition-opacity relative z-50"
+            className="text-lg md:text-xl font-display font-bold tracking-tight hover:opacity-80 transition-opacity relative z-50 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent hover:from-white hover:to-gray-300"
             onClick={handleMenuClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             AADHIASARANA T
-          </a>
+          </motion.a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
-              <a
+              <motion.a
                 key={item.id}
                 href={`#${item.id}`}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 relative ${
                   activeSection === item.id
-                    ? 'bg-white/10 text-white'
+                    ? 'bg-white/15 text-white'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 {item.label}
-              </a>
+                {activeSection === item.id && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-white to-gray-400"
+                    layoutId="navIndicator"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                )}
+              </motion.a>
             ))}
-            <a
+            <motion.a
               href="/AADHI_RESUME.pdf"
               download="AADHI_RESUME.pdf"
-              className="ml-4 px-6 py-2 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-200 transition-all duration-300"
+              className="ml-4 px-6 py-2 bg-gradient-to-r from-gray-300 to-gray-400 hover:from-white hover:to-gray-300 text-black text-sm font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-gray-400/30"
+              whileHover={{ scale: 1.08, boxShadow: "0 0 20px rgba(200, 200, 200, 0.4)" }}
+              whileTap={{ scale: 0.95 }}
             >
               Resume
-            </a>
+            </motion.a>
           </div>
 
           {/* Mobile Menu Button */}

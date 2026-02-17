@@ -85,7 +85,7 @@ function App() {
             <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
               <Particles 
                 particleCount={isMobile ? 150 : 300}
-                particleColors={['#9c43ff', '#4cc9f0', '#ffffff']}
+                particleColors={['#ffffff', '#e0e0e0', '#d0d0d0']}
                 particleSpread={10}
                 speed={isMobile ? 0.3 : 0.5}
                 alphaParticles={true}
@@ -118,7 +118,7 @@ function App() {
               <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
                 <Particles 
                   particleCount={300}
-                  particleColors={['#9c43ff', '#4cc9f0', '#ffffff']}
+                  particleColors={['#ffffff', '#e0e0e0', '#d0d0d0']}
                   particleSpread={10}
                   speed={0.5}
                   alphaParticles={true}

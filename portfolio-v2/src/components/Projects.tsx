@@ -5,35 +5,68 @@ import { useRef } from 'react'
 const projects = [
   {
     id: 1,
-    title: 'LINKOVA - Social Media Platform',
+    title: 'ZYCARE',
     description:
-      'A full-stack LinkedIn clone built with MERN stack featuring JWT authentication, posts with likes/comments, user profiles, real-time updates, and modern responsive UI. Deployed on Netlify (frontend) and Render (backend).',
-    image: 'https://images.unsplash.com/photo-1611944212129-29977ae1398c?w=800&h=600&fit=crop',
-    tags: ['MongoDB', 'Express', 'React', 'Node.js', 'JWT', 'REST API'],
-    liveUrl: 'https://linkova.netlify.app',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/MERN_LINKOVA',
+      'A TypeScript-based healthcare management system. Modern full-stack application with integrated healthcare features and real-time capabilities.',
+    image: 'https://images.unsplash.com/photo-1576091160550-112173e7d7cb?w=800&h=600&fit=crop',
+    tags: ['TypeScript', 'Healthcare', 'Full-Stack'],
+    liveUrl: '#',
+    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/ZYCARE',
     year: '2025',
   },
   {
     id: 2,
-    title: 'Data Visualization Dashboard',
+    title: 'FARMER-SCHEMES',
     description:
-      'Interactive Python dashboard built with Streamlit for visualizing complex datasets. Features dynamic plots, real-time data analysis, and an intuitive interface for exploring data insights.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-    tags: ['Python', 'Streamlit', 'Pandas', 'Data Visualization', 'Analytics'],
+      'A comprehensive platform connecting farmers with government schemes and agricultural resources. Built with JavaScript for seamless user experience.',
+    image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&h=600&fit=crop',
+    tags: ['JavaScript', 'Web App', 'Agriculture'],
     liveUrl: '#',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/Streamlit-python---simple-',
+    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/FARMER-SCHEMES',
     year: '2025',
   },
   {
     id: 3,
-    title: 'Modern Portfolio Website',
+    title: 'MERN_LINKOVA',
     description:
-      'A stunning personal portfolio built with React, TypeScript, and Three.js. Features smooth scroll animations, 3D particle backgrounds, touch-responsive elements, and mobile-first responsive design.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-    tags: ['React', 'TypeScript', 'Three.js', 'Framer Motion', 'TailwindCSS', 'Vite'],
+      'A full-featured LinkedIn clone built with MERN stack featuring real-time updates, authentication, user profiles, and post management system.',
+    image: 'https://images.unsplash.com/photo-1611944212129-29977ae1398c?w=800&h=600&fit=crop',
+    tags: ['MongoDB', 'Express', 'React', 'Node.js'],
     liveUrl: '#',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/-Aadhi-s-portfolio',
+    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/MERN_LINKOVA',
+    year: '2025',
+  },
+  {
+    id: 4,
+    title: 'Digital Queue Management',
+    description:
+      'A government queue management system for efficiently managing citizen services. Built with JavaScript for reliability and ease of use.',
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
+    tags: ['JavaScript', 'Queue System', 'Admin Panel'],
+    liveUrl: '#',
+    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/Digital-Queue-Management',
+    year: '2025',
+  },
+  {
+    id: 5,
+    title: 'SECURE-VOTING-SYSTEM',
+    description:
+      'A secure voting system built with Java. Implements cryptographic voting mechanisms and audit trails for transparent elections.',
+    image: 'https://images.unsplash.com/photo-1579389334228-c0fa7d8eba90?w=800&h=600&fit=crop',
+    tags: ['Java', 'Security', 'Cryptography'],
+    liveUrl: '#',
+    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/SECURE-VOTING-SYSTEM',
+    year: '2025',
+  },
+  {
+    id: 6,
+    title: 'GYM-MANAGEMENT',
+    description:
+      'A comprehensive gym management system with membership tracking, class scheduling, and member analytics. Built for fitness industry operations.',
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop',
+    tags: ['JavaScript', 'Management System', 'Database'],
+    liveUrl: '#',
+    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/GYM-MANAGEMENT',
     year: '2025',
   },
 ]
@@ -65,18 +98,17 @@ export default function Projects() {
           viewport={{ once: false }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight max-w-4xl shine-effect">
-            Featured projects that showcase my expertise in building{' '}
-            <span className="text-gray-500">exceptional digital experiences</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight max-w-4xl text-white">
+            Featured Projects
           </h2>
           <p className="text-gray-400 mt-4 text-sm md:text-base">
-            👉 Explore my featured projects below
+            A selection of my recent work
           </p>
         </motion.div>
       </div>
 
       {/* Projects Grid - Responsive Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-6 lg:px-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 px-6 lg:px-8 max-w-5xl mx-auto">
         {projects.map((project, index) => (
           <motion.div
             key={project.id}
@@ -87,17 +119,16 @@ export default function Projects() {
             transition={{ duration: 0.6, delay: index * 0.1 }}
           >
               <motion.div 
-                className="relative overflow-hidden rounded-3xl bg-dark-800/50 backdrop-blur-xl border border-white/20 h-full shadow-2xl"
+                className="relative overflow-hidden rounded-2xl bg-black/40 backdrop-blur border border-white/10 h-full shadow-lg hover:border-white/30 transition-all duration-300"
                 whileHover={{ 
-                  borderColor: "rgba(255,255,255,0.4)",
-                  scale: 1.02,
-                  y: -8,
-                  boxShadow: "0 25px 70px rgba(139,92,246,0.2)"
+                  scale: 1.05,
+                  y: -4,
+                  boxShadow: "0 15px 40px rgba(255,255,255,0.1)"
                 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.3 }}
               >
                 {/* Project Image */}
-                <div className="relative h-[280px] md:h-[320px] overflow-hidden">
+                <div className="relative h-[200px] md:h-[220px] overflow-hidden">
                   <motion.img
                     src={project.image}
                     alt={project.title}
@@ -109,17 +140,17 @@ export default function Projects() {
                   
                   {/* Year Badge */}
                   <motion.div 
-                    className="absolute top-4 right-4 bg-white/15 backdrop-blur-md px-4 py-2 rounded-full text-sm font-bold shadow-lg"
-                    whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.25)' }}
+                    className="absolute top-3 right-3 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold shadow-lg"
+                    whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.3)' }}
                   >
                     {project.year}
                   </motion.div>
                 </div>
 
                 {/* Project Content */}
-                <div className="p-6 md:p-8 space-y-5">
+                <div className="p-5 md:p-6 space-y-3">
                   <motion.h3 
-                    className="text-2xl md:text-3xl font-bold leading-tight text-white"
+                    className="text-xl md:text-2xl font-bold leading-tight text-white"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -129,7 +160,7 @@ export default function Projects() {
                   </motion.h3>
                   
                   <motion.p 
-                    className="text-gray-300 leading-relaxed text-sm md:text-base min-h-[80px]"
+                    className="text-gray-400 leading-relaxed text-xs md:text-sm min-h-[60px] line-clamp-3"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -140,16 +171,16 @@ export default function Projects() {
 
                   {/* Tags */}
                   <motion.div 
-                    className="flex flex-wrap gap-2 pt-2"
+                    className="flex flex-wrap gap-1.5 pt-2"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 }}
                   >
-                    {project.tags.map((tag) => (
+                    {project.tags.slice(0, 3).map((tag) => (
                       <motion.span
                         key={tag}
-                        className="px-4 py-1.5 text-xs md:text-sm font-semibold bg-white/10 text-white rounded-full border border-white/20 shadow-sm"
+                        className="px-2 py-0.5 rounded-full text-xs font-medium bg-white/10 text-gray-300 border border-white/10 hover:bg-white/15 transition-colors"
                         whileHover={{ backgroundColor: 'rgba(255,255,255,0.2)', borderColor: 'rgba(255,255,255,0.3)', scale: 1.05, y: -2 }}
                         transition={{ duration: 0.2 }}
                       >
@@ -159,27 +190,27 @@ export default function Projects() {
                   </motion.div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 md:gap-4 pt-6">
+                  <div className="flex gap-2 pt-3">
                     <motion.a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-5 md:px-7 py-3 md:py-3.5 bg-white text-black rounded-full font-bold text-sm md:text-base group shadow-lg hover:shadow-xl"
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
+                      className={`flex items-center gap-1 px-3 py-1.5 bg-white text-black rounded-lg text-xs font-semibold hover:bg-gray-200 transition-all duration-300 ${project.liveUrl === '#' ? 'opacity-30 cursor-not-allowed pointer-events-none' : ''} group`}
+                      whileHover={project.liveUrl !== '#' ? { scale: 1.05 } : {}}
+                      whileTap={project.liveUrl !== '#' ? { scale: 0.95 } : {}}
                     >
-                      <span>View Live</span>
-                      <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+                      <ExternalLink className="w-3 h-3" />
+                      <span>Live</span>
                     </motion.a>
                     <motion.a
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-5 md:px-7 py-3 md:py-3.5 border-2 border-white/30 rounded-full font-bold text-sm md:text-base group hover:bg-white/10"
-                      whileHover={{ scale: 1.05, borderColor: 'rgba(255,255,255,0.5)', y: -2 }}
-                      whileTap={{ scale: 0.98 }}
+                      className="flex items-center gap-1 px-3 py-1.5 border border-white text-white rounded-lg text-xs font-semibold hover:bg-white hover:text-black transition-all duration-300 group"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      <Github className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                      <Github className="w-3 h-3" />
                       <span>Code</span>
                     </motion.a>
                   </div>

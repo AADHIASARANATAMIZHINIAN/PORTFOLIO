@@ -184,8 +184,8 @@ export default function Hero() {
           >
             <motion.a
               href="#projects"
-              className="group relative px-8 py-4 bg-gradient-to-r from-cyan-400 via-cyan-300 to-cyan-400 text-black rounded-lg font-bold overflow-hidden shadow-xl glow-effect"
-              whileHover={{ scale: 1.08, boxShadow: "0 25px 50px rgba(76, 201, 240, 0.4)" }}
+              className="group relative px-8 py-4 bg-gradient-to-r from-white via-gray-300 to-white text-black rounded-lg font-bold overflow-hidden shadow-xl glow-effect"
+              whileHover={{ scale: 1.08, boxShadow: "0 25px 50px rgba(255, 255, 255, 0.4)" }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.3 }}
             >
@@ -200,12 +200,12 @@ export default function Hero() {
                   →
                 </motion.span>
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-white to-gray-300 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
             </motion.a>
             <motion.a
               href="#contact"
-              className="px-8 py-4 border border-white/20 rounded-lg font-semibold backdrop-blur-sm hover:border-cyan-400 hover:border-opacity-80 hover:shadow-lg hover:shadow-cyan-400/20 transition-all duration-300"
-              whileHover={{ scale: 1.05, backgroundColor: "rgba(76, 201, 240, 0.05)" }}
+              className="px-8 py-4 border border-white/20 rounded-lg font-semibold backdrop-blur-sm hover:border-white hover:border-opacity-80 hover:shadow-lg hover:shadow-white/20 transition-all duration-300"
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.05)" }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
             >

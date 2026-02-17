@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Mail, Linkedin, Github, Send } from 'lucide-react'
+import { motion } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 
 export default function Contact() {
@@ -79,9 +80,9 @@ export default function Contact() {
               <div className="space-y-6">
                 <a
                   href="mailto:aadhiasarana12@gmail.com"
-                  className="flex items-center gap-4 text-lg hover:text-cyan-300 transition-colors group"
+                  className="flex items-center gap-4 text-lg hover:text-white transition-colors group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center group-hover:from-cyan-500/40 group-hover:to-purple-500/40 transition-all border border-cyan-500/30 group-hover:border-purple-500/50">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white/20 to-gray-300/20 flex items-center justify-center group-hover:from-white/40 group-hover:to-gray-300/40 transition-all border border-white/30 group-hover:border-gray-300/50">
                     <Mail className="w-5 h-5" />
                   </div>
                   <span>aadhiasarana12@gmail.com</span>
@@ -91,9 +92,9 @@ export default function Contact() {
                   href="https://www.linkedin.com/in/aadhiasarana-t-529641328"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 text-lg hover:text-cyan-300 transition-colors group"
+                  className="flex items-center gap-4 text-lg hover:text-white transition-colors group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center group-hover:from-cyan-500/40 group-hover:to-purple-500/40 transition-all border border-cyan-500/30 group-hover:border-purple-500/50">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white/20 to-gray-300/20 flex items-center justify-center group-hover:from-white/40 group-hover:to-gray-300/40 transition-all border border-white/30 group-hover:border-gray-300/50">
                     <Linkedin className="w-5 h-5" />
                   </div>
                   <span>LinkedIn Profile</span>
@@ -103,9 +104,9 @@ export default function Contact() {
                   href="https://github.com/AADHIASARANATAMIZHINIAN"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 text-lg hover:text-cyan-300 transition-colors group"
+                  className="flex items-center gap-4 text-lg hover:text-white transition-colors group"
                 >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center group-hover:from-cyan-500/40 group-hover:to-purple-500/40 transition-all border border-cyan-500/30 group-hover:border-purple-500/50">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-white/20 to-gray-300/20 flex items-center justify-center group-hover:from-white/40 group-hover:to-gray-300/40 transition-all border border-white/30 group-hover:border-gray-300/50">
                     <Github className="w-5 h-5" />
                   </div>
                   <span>GitHub Profile</span>
@@ -114,10 +115,10 @@ export default function Contact() {
             </div>
 
             {/* Availability Badge */}
-            <div className="bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-transparent backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-8 hover:border-purple-500/50 transition-all shadow-lg group">
+            <div className="bg-gradient-to-br from-white/10 via-gray-300/10 to-transparent backdrop-blur-xl border border-white/30 rounded-2xl p-8 hover:border-gray-300/50 transition-all shadow-lg group">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-400 to-green-400 animate-pulse"></div>
-                <span className="font-semibold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent group-hover:from-cyan-200 group-hover:to-purple-200">
+                <div className="w-3 h-3 rounded-full bg-gradient-to-r from-white to-gray-300 animate-pulse"></div>
+                <span className="font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-300">
                   Available for Work
                 </span>
               </div>
@@ -129,9 +130,15 @@ export default function Contact() {
           </div>
 
           {/* Right Column - Contact Form */}
-          <div className="animate-on-scroll">
+          <motion.div 
+            className="animate-on-scroll"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
             {status === 'success' ? (
-              <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-8 text-center">
+              <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/5 border border-green-500/30 rounded-2xl p-8 text-center backdrop-blur-sm">
                 <div className="text-4xl mb-4">✓</div>
                 <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
                 <p className="text-gray-400">
@@ -143,7 +150,7 @@ export default function Contact() {
                 <div>
                   <label
                     htmlFor="name"
-                    className="block text-sm font-semibold mb-2"
+                    className="block text-sm font-semibold mb-2 text-gray-300"
                   >
                     Your Name
                   </label>
@@ -154,7 +161,7 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 text-base bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors"
+                    className="w-full px-4 py-3 text-base bg-white/5 backdrop-blur-sm border border-white/30 rounded-lg focus:outline-none focus:border-white focus:bg-white/10 focus:ring-1 focus:ring-white/30 transition-all placeholder-gray-500"
                     placeholder="John Doe"
                     autoComplete="name"
                   />
@@ -163,7 +170,7 @@ export default function Contact() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-semibold mb-2"
+                    className="block text-sm font-semibold mb-2 text-gray-300"
                   >
                     Email Address
                   </label>
@@ -174,7 +181,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 text-base bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors"
+                    className="w-full px-4 py-3 text-base bg-white/5 backdrop-blur-sm border border-white/30 rounded-lg focus:outline-none focus:border-white focus:bg-white/10 focus:ring-1 focus:ring-white/30 transition-all placeholder-gray-500"
                     placeholder="john@example.com"
                     autoComplete="email"
                   />
@@ -183,7 +190,7 @@ export default function Contact() {
                 <div>
                   <label
                     htmlFor="message"
-                    className="block text-sm font-semibold mb-2"
+                    className="block text-sm font-semibold mb-2 text-gray-300"
                   >
                     Message
                   </label>
@@ -194,24 +201,32 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     rows={6}
-                    className="w-full px-4 py-3 text-base bg-dark-800/20 backdrop-blur-sm border border-white/10 rounded-lg focus:outline-none focus:border-white/30 focus:bg-dark-800/30 transition-colors resize-none"
+                    className="w-full px-4 py-3 text-base bg-white/5 backdrop-blur-sm border border-white/30 rounded-lg focus:outline-none focus:border-white focus:bg-white/10 focus:ring-1 focus:ring-white/30 transition-all resize-none placeholder-gray-500"
                     placeholder="Tell me about your project..."
                   />
                 </div>
 
-                <button
+                <motion.button
                   type="submit"
                   disabled={status === 'sending'}
-                  className="w-full px-8 py-4 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                  className="w-full px-8 py-4 bg-gradient-to-r from-white to-gray-300 hover:from-white hover:to-gray-300 text-black rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group shadow-lg hover:shadow-white/30"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <span>
                     {status === 'sending' ? 'Sending...' : 'Send Message'}
                   </span>
                   <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                </motion.button>
+
+                {status === 'error' && (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-red-300 text-sm">
+                    Failed to send message. Please try again.
+                  </div>
+                )}
               </form>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
