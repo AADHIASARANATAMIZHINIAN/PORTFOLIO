@@ -1,137 +1,146 @@
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+
+const stats = [
+  { value: 6, suffix: '+', label: 'Projects Built',    sublabel: 'shipped on GitHub' },
+  { value: 2, suffix: '',  label: 'Internships',       sublabel: 'Unified Mentor · Cognifz' },
+  { value: 2028, suffix: '', label: 'Graduating',      sublabel: 'open to opportunities' },
+]
+
+function CountUp({ target, suffix }: { target: number; suffix: string }) {
+  const [count, setCount] = useState(0)
+  const ref = useRef<HTMLSpanElement>(null)
+  const started = useRef(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true
+        const duration = 1200
+        const steps = 40
+        const increment = target / steps
+        let current = 0
+        const interval = setInterval(() => {
+          current = Math.min(current + increment, target)
+          setCount(Math.floor(current))
+          if (current >= target) clearInterval(interval)
+        }, duration / steps)
+      }
+    }, { threshold: 0.5 })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [target])
+
+  return <span ref={ref}>{count}{suffix}</span>
+}
 
 export default function About() {
   return (
-    <section id="about" className="py-32 relative">
+    <section id="about" className="py-28 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Section Label */}
-        <motion.div 
-          className="mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-            [01] About Me
-          </span>
-        </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* Left Content */}
-          <motion.div 
-            className="space-y-8"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+        {/* Section header */}
+        <div className="relative mb-20">
+          <span className="section-num select-none" aria-hidden>01</span>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.55 }}
           >
-            <motion.h2 
-              className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-            >
-              Traditional students learn from books.{' '}
-              <span className="text-gray-500">I learn by building and breaking things.</span>
-            </motion.h2>
-          </motion.div>
-
-          {/* Right Content - Text */}
-          <motion.div 
-            className="space-y-6 text-lg text-gray-400 leading-relaxed"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <motion.p 
-              className="hover:text-gray-300 transition-colors duration-300"
-              whileHover={{ x: 5 }}
-            >
-              Hey there! 👋 I'm <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent font-semibold">AADHIASARANA T</span>, an AI & Data Science student 
-              on a mission to explore the intersection of technology and creativity. My journey into tech started 
-              with curiosity, and it's now fueled by passion for building things that matter.
-            </motion.p>
-
-            <motion.p 
-              className="hover:text-gray-300 transition-colors duration-300"
-              whileHover={{ x: 5 }}
-            >
-              Currently diving deep into <span className="text-white font-semibold">Python, C, and JavaScript</span>, while 
-              building projects with <span className="text-white font-semibold">React, Node.js, Flask, and Django</span>. 
-              I'm fascinated by AI/ML applications and love creating web and mobile experiences that are both 
-              functional and beautiful. Oh, and I'm also learning Japanese (日本語) on the side! 🇯🇵
-            </motion.p>
-
-            <motion.p 
-              className="hover:text-gray-300 transition-colors duration-300"
-              whileHover={{ x: 5 }}
-            >
-              My goal? Build elegant applications, contribute to open source, and level up every single day. 
-              When I'm not coding, you'll find me experimenting with new tech stacks, working on personal projects, 
-              or exploring how tech can solve real-world problems.
-            </motion.p>
+            <p className="font-mono text-xs text-brand/70 tracking-[0.2em] uppercase mb-3">About me</p>
+            <div style={{ overflow: 'hidden' }}>
+              <motion.h2
+                className="font-display font-bold"
+                style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)', letterSpacing: '0.02em', lineHeight: 0.95 }}
+                initial={{ clipPath: 'inset(100% 0 0 0)', y: 20 }}
+                whileInView={{ clipPath: 'inset(0% 0 0 0)', y: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="text-white">Code meets</span>
+                <br />
+                <span className="brand-gradient-text">purpose.</span>
+              </motion.h2>
+            </div>
           </motion.div>
         </div>
 
-        {/* Stats */}
-        <motion.div 
-          className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-20"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          {[
-            { value: "AI & DS", label: "Student" },
-            { value: "15+", label: "Projects Built" },
-            { value: "7+", label: "Repositories" },
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              className="group relative"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-              whileHover={{ scale: 1.08, y: -5 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-gray-300/10 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg" />
-              <div className="relative p-4 rounded-lg border border-white/10 group-hover:border-white/20 transition-all bg-white/2 backdrop-blur">
-                <div className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-display font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-300 transition-all">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-gray-500 uppercase tracking-wider mt-2 group-hover:text-gray-300 transition-colors">
-                  {stat.label}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+        {/* Bio + stats */}
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
 
-        {/* Available for Work Badge */}
-        <motion.div 
-          className="mt-12 md:mt-16"
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          <motion.div 
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-white/10 via-gray-300/10 to-white/5 backdrop-blur-lg border border-white/30 rounded-full px-6 py-3 hover:border-gray-300/50 transition-all shadow-lg"
-            whileHover={{ scale: 1.08, backgroundColor: "rgba(255, 255, 255, 0.15)", borderColor: "rgba(200, 200, 200, 0.5)" }}
-            transition={{ duration: 0.3 }}
+          {/* Bio */}
+          <motion.div
+            className="space-y-5"
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.15 }}
+            transition={{ duration: 0.65, delay: 0.15 }}
           >
-            <motion.div 
-              className="w-3 h-3 rounded-full bg-gradient-to-r from-white to-gray-300"
-              animate={{ scale: [1, 1.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-            <span className="font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              Open to Internships & Collaborations
-            </span>
+            <p className="font-body text-white/70 text-lg leading-relaxed">
+              Hi, I'm <span className="text-white font-semibold">AADHIASARANA T</span>, an AI & Data Science
+              student who enjoys building intelligent systems and modern web applications.
+            </p>
+            <p className="font-body text-white/60 text-base leading-relaxed">
+              I spend most of my time experimenting with new technologies, working in Linux environments,
+              and creating projects that combine AI, software engineering, and automation.
+            </p>
+            <p className="font-body text-white/60 text-base leading-relaxed">
+              Outside of coding, I'm also learning Japanese, which reflects my curiosity for new languages,
+              cultures, and continuous learning.
+            </p>
+
+            {/* Badges */}
+            <div className="flex flex-wrap gap-3 pt-1">
+              <motion.div
+                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full"
+                style={{ background: 'rgba(79,255,176,0.08)', border: '1px solid rgba(79,255,176,0.25)' }}
+                whileHover={{ scale: 1.03 }}
+              >
+                <span className="w-2 h-2 rounded-full bg-brand animate-brand-pulse flex-shrink-0" />
+                <span className="font-body text-sm font-semibold text-brand">Open to Internships</span>
+              </motion.div>
+              <motion.div
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full"
+                style={{ background: 'rgba(123,97,255,0.08)', border: '1px solid rgba(123,97,255,0.25)' }}
+                whileHover={{ scale: 1.03 }}
+              >
+                <span className="font-body text-sm text-aurora-purple/90">JLPT N5 · A Grade</span>
+              </motion.div>
+            </div>
           </motion.div>
-        </motion.div>
+
+          {/* Stat cards */}
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4"
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.15 }}
+            transition={{ duration: 0.65, delay: 0.25 }}
+          >
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                className="glass glass-hover p-6"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.3 + i * 0.08 }}
+              >
+                <div
+                  className="font-display brand-gradient-text mb-1"
+                  style={{ fontSize: 'clamp(2rem, 5vw, 2.75rem)', letterSpacing: '0.02em' }}
+                >
+                  <CountUp target={stat.value} suffix={stat.suffix} />
+                </div>
+                <div className="font-body font-semibold text-white/85 text-sm mb-0.5">{stat.label}</div>
+                <div className="font-mono text-white/40 text-xs">{stat.sublabel}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -1,158 +1,263 @@
-import { useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface SplashScreenProps {
   onComplete: () => void
 }
 
-export default function SplashScreen({ onComplete }: SplashScreenProps) {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onComplete()
-    }, 3500) // Reduced from 4500ms
+// Shared name content — rendered twice (top + bottom clip)
+function NameBlock() {
+  return (
+    <div style={{
+      position:       'absolute',
+      inset:          0,
+      display:        'flex',
+      flexDirection:  'column',
+      alignItems:     'center',
+      justifyContent: 'center',
+      textAlign:      'center',
+    }}>
+      <div style={{
+        fontFamily:    'Clash Display, sans-serif',
+        fontWeight:    700,
+        fontSize:      'clamp(2rem, 7vw, 5.2rem)',
+        color:         '#ffffff',
+        letterSpacing: '0.07em',
+        lineHeight:    1,
+        textShadow:    '0 0 60px rgba(255,255,255,0.18)',
+        position:      'relative',
+        zIndex:        1,
+      }}>AADHIASARANA</div>
 
-    return () => clearTimeout(timer)
+      <div style={{
+        fontFamily:    'Clash Display, sans-serif',
+        fontWeight:    700,
+        fontSize:      'clamp(0.9rem, 2.8vw, 2rem)',
+        color:         'rgba(255,255,255,0.38)',
+        letterSpacing: '0.5em',
+        marginTop:     '5px',
+        position:      'relative',
+        zIndex:        1,
+      }}>T</div>
+
+      <div style={{
+        marginTop:     '18px',
+        fontFamily:    'JetBrains Mono, monospace',
+        fontSize:      'clamp(8px, 1vw, 10px)',
+        letterSpacing: '0.32em',
+        color:         'rgba(255,255,255,0.18)',
+        textTransform: 'uppercase',
+        position:      'relative',
+        zIndex:        1,
+      }}>AI · Full-Stack · Data Science</div>
+    </div>
+  )
+}
+
+// Three slashes at ~60° (\ direction, steep diagonal)
+const SLASHES = [
+  { angle: '62deg',  top: '48%', delay: 0,    h: 3,   bright: '#ffffff',              glow: 'rgba(255,255,255,0.90)' },
+  { angle: '58deg',  top: '42%', delay: 0.07, h: 1.5, bright: 'rgba(220,240,255,0.75)', glow: 'rgba(200,230,255,0.60)' },
+  { angle: '66deg',  top: '54%', delay: 0.13, h: 1,   bright: 'rgba(255,255,255,0.55)', glow: 'rgba(255,255,255,0.40)' },
+] as const
+
+// Clip polygons matching the ~62° \ diagonal through the name container.
+// Container ~720 wide × 220 tall, slash through centre:
+//   top entry  ≈ 44% from left  (y = 0)
+//   btm exit   ≈ 56% from left  (y = 100%)
+const TOP_CLIP = 'polygon(0 0, 44% 0, 56% 100%, 0 100%)'   // left trapezoid
+const BTM_CLIP = 'polygon(44% 0, 100% 0, 100% 100%, 56% 100%)' // right trapezoid
+
+export default function SplashScreen({ onComplete }: SplashScreenProps) {
+  // 0=black 1=name 2=slashes 3=cut+freeze 4=tbc 5=exit
+  const [phase, setPhase] = useState(0)
+
+  useEffect(() => {
+    const t = [
+      setTimeout(() => setPhase(1),  130),
+      setTimeout(() => setPhase(2),  460),
+      setTimeout(() => setPhase(3),  760),
+      setTimeout(() => setPhase(4), 1580),
+      setTimeout(() => { setPhase(5); setTimeout(onComplete, 400) }, 2500),
+    ]
+    return () => t.forEach(clearTimeout)
   }, [onComplete])
 
-  const letters = ['A', 'A', 'D', 'H', 'I', 'A', 'S', 'A', 'R', 'A', 'N', 'A']
+  const cut = phase >= 3
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, delay: 2.8 }}
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black overflow-hidden touch-none"
-      style={{ WebkitTapHighlightColor: 'transparent' }}
+      transition={{ duration: 0.35, ease: 'easeIn' }}
+      style={{
+        position:       'fixed',
+        inset:          0,
+        zIndex:         9999,
+        background:     '#000000',
+        overflow:       'hidden',
+        display:        'flex',
+        alignItems:     'center',
+        justifyContent: 'center',
+      }}
     >
-      {/* Pure black background */}
-      <div className="absolute inset-0 bg-black" />
 
-      {/* Main text container */}
-      <div className="relative flex items-center justify-center gap-0.5 sm:gap-1 md:gap-2 px-4">
-        {/* Letter animations */}
-        {letters.map((letter, index) => (
+      {/* ── Name (two clipped halves that drift apart) ── */}
+      <AnimatePresence>
+        {phase >= 1 && phase < 5 && (
           <motion.div
-            key={index}
-            initial={{ 
-              opacity: 0,
-              x: index % 2 === 0 ? -50 - (index * 10) : 50 + (index * 10),
-              y: index % 3 === 0 ? -40 : index % 3 === 1 ? 40 : 0,
-              rotate: index % 2 === 0 ? -90 : 90,
-              scale: 0
-            }}
-            animate={{ 
-              opacity: 1,
-              x: 0,
-              y: 0,
-              rotate: 0,
-              scale: 1
-            }}
-            transition={{
-              duration: 0.8,
-              delay: index * 0.08,
-              ease: [0.6, 0.05, 0.01, 0.9]
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              position: 'relative',
+              zIndex:   10,
+              width:    'min(720px, 90vw)',
+              height:   'clamp(160px, 26vw, 240px)',
             }}
           >
-            <motion.span
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-black text-white block"
-              style={{
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                letterSpacing: '-0.02em',
-                WebkitFontSmoothing: 'antialiased',
-              }}
+            {/* LEFT half — drifts left + up after cut */}
+            <motion.div
+              animate={{ x: cut ? -10 : 0, y: cut ? -8 : 0 }}
+              transition={{ duration: 0.30, ease: [0.16, 1, 0.3, 1], delay: 0.04 }}
+              style={{ position: 'absolute', inset: 0, clipPath: TOP_CLIP, overflow: 'hidden' }}
             >
-              {letter}
-            </motion.span>
-          </motion.div>
-        ))}
-      </div>
+              <NameBlock />
+            </motion.div>
 
-      {/* Rotating hexagon loader */}
-      <motion.div
-        initial={{ scale: 0, rotate: 0, opacity: 0 }}
-        animate={{ 
-          scale: [0, 1.2, 1],
-          rotate: 360,
-          opacity: [0, 1, 1]
-        }}
-        transition={{
-          duration: 1.2,
-          delay: 1.5,
-          ease: [0.6, 0.05, 0.01, 0.9]
-        }}
-        className="absolute top-1/2 left-1/2 w-24 sm:w-28 md:w-32 h-24 sm:h-28 md:h-32"
-        style={{ 
-          transform: 'translate(-50%, -50%)',
-        }}
-      >
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: 'linear'
-          }}
-          className="w-full h-full border-2 sm:border-3 md:border-4 border-white"
-          style={{ 
-            clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-          }}
-        />
-      </motion.div>
-      
-      {/* Inner rotating hexagon */}
-      <motion.div
-        initial={{ scale: 0, rotate: 0, opacity: 0 }}
-        animate={{ 
-          scale: [0, 1.2, 1],
-          rotate: -360,
-          opacity: [0, 1, 1]
-        }}
-        transition={{
-          duration: 1.2,
-          delay: 1.7,
-          ease: [0.6, 0.05, 0.01, 0.9]
-        }}
-        className="absolute top-1/2 left-1/2 w-14 sm:w-16 md:w-20 h-14 sm:h-16 md:h-20"
-        style={{ 
-          transform: 'translate(-50%, -50%)',
-        }}
-      >
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: 'linear'
-          }}
-          className="w-full h-full border sm:border-2 border-white opacity-50"
-          style={{ 
-            clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-          }}
-        />
-      </motion.div>
-      
-      {/* Expanding ring */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ 
-          scale: [0, 60],
-          opacity: [0.5, 0]
-        }}
-        transition={{
-          duration: 2,
-          delay: 2.5,
-          ease: [0.65, 0, 0.35, 1]
-        }}
-        className="absolute top-1/2 left-1/2 w-8 h-8 rounded-full border border-white"
-        style={{ 
-          transform: 'translate(-50%, -50%)',
+            {/* RIGHT half — drifts right + down after cut */}
+            <motion.div
+              animate={{ x: cut ? 10 : 0, y: cut ? 8 : 0 }}
+              transition={{ duration: 0.30, ease: [0.16, 1, 0.3, 1], delay: 0.04 }}
+              style={{ position: 'absolute', inset: 0, clipPath: BTM_CLIP, overflow: 'hidden' }}
+            >
+              <NameBlock />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Three diagonal sword slashes ── */}
+      {SLASHES.map((s, i) => (
+        <AnimatePresence key={i}>
+          {phase >= 2 && phase < 5 && (
+            <motion.div
+              initial={{ scaleX: 0, opacity: 1 }}
+              animate={{ scaleX: 1, opacity: cut ? 0 : 1 }}
+              transition={{
+                scaleX:  { duration: 0.18, delay: s.delay, ease: [0.2, 1, 0.2, 1] },
+                opacity: { duration: 0.38, delay: s.delay + 0.16 },
+              }}
+              style={{
+                position:        'absolute',
+                top:             s.top,
+                left:            '-6%',
+                width:           '112%',
+                height:          `${s.h}px`,
+                background:      `linear-gradient(90deg, transparent 0%, ${s.glow} 12%, ${s.bright} 50%, ${s.glow} 88%, transparent 100%)`,
+                transform:       `rotate(${s.angle}) translateY(-50%)`,
+                transformOrigin: 'left center',
+                boxShadow:       `0 0 22px 8px ${s.glow}, 0 0 80px 24px rgba(200,235,255,0.12)`,
+                pointerEvents:   'none',
+              }}
+            />
+          )}
+        </AnimatePresence>
+      ))}
+
+      {/* ── Impact flash ── */}
+      <AnimatePresence>
+        {phase === 2 && (
+          <motion.div
+            initial={{ opacity: 0.70 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.28, delay: 0.13 }}
+            style={{
+              position:      'absolute',
+              inset:         0,
+              background:    'rgba(255,255,255,0.22)',
+              pointerEvents: 'none',
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Freeze-frame sepia wash ── */}
+      <AnimatePresence>
+        {phase >= 3 && phase < 5 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.15, 0.08] }}
+            transition={{ duration: 0.40, times: [0, 0.25, 1] }}
+            style={{
+              position:     'absolute',
+              inset:        0,
+              background:   'rgba(230,155,40,0.22)',
+              mixBlendMode: 'multiply' as const,
+              pointerEvents: 'none',
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── "To Be Continued ►" ── */}
+      <AnimatePresence>
+        {phase >= 4 && phase < 5 && (
+          <motion.div
+            initial={{ opacity: 0, x: 55 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            style={{
+              position:   'absolute',
+              bottom:     '52px',
+              right:      '44px',
+              display:    'flex',
+              alignItems: 'center',
+              gap:        '11px',
+            }}
+          >
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                width:           '32px',
+                height:          '2px',
+                background:      '#e8a820',
+                transformOrigin: 'left',
+                flexShrink:      0,
+              }}
+            />
+            <span style={{
+              fontFamily:    'Clash Display, sans-serif',
+              fontWeight:    700,
+              fontSize:      'clamp(10px, 1.3vw, 13px)',
+              letterSpacing: '0.20em',
+              color:         '#e8a820',
+              textTransform: 'uppercase' as const,
+              whiteSpace:    'nowrap',
+            }}>
+              To Be Continued
+            </span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M4 20 C4 8, 14 3, 20 8" stroke="#e8a820" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+              <polygon points="20,8 15,5.5 15.5,11" fill="#e8a820" />
+            </svg>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Vignette ── */}
+      <div
+        aria-hidden
+        style={{
+          position:      'absolute',
+          inset:         0,
+          background:    'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 38%, rgba(0,0,0,0.85) 100%)',
+          pointerEvents: 'none',
         }}
       />
     </motion.div>
   )
 }
-
-
-
-

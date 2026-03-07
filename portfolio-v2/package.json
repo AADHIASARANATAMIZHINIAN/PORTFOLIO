@@ -14,7 +14,6 @@
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",
     "@types/three": "^0.181.0",
-    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^10.18.0",
     "lenis": "^1.3.13",
@@ -24,7 +23,6 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7",
     "three": "^0.159.0"
   },
   "devDependencies": {
@@ -34,7 +32,6 @@
     "@typescript-eslint/parser": "^6.14.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.16",
-    "baseline-browser-mapping": "^2.9.19",
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",

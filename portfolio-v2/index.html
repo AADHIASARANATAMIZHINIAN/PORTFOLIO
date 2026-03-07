@@ -1,139 +1,41 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
-    <meta name="description" content="AADHIASARANA T - AI & Data Science Student, Full Stack Developer Portfolio" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#0a0a0a" />
-    <meta name="format-detection" content="telephone=no" />
-    <title>AADHIASARANA T - Portfolio</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Preload critical resources -->
-    <link rel="modulepreload" href="/src/main.tsx">
-    <link rel="modulepreload" href="/src/App.tsx">
-    <link rel="modulepreload" href="/src/components/Navigation.tsx">
-    <link rel="modulepreload" href="/src/components/Hero.tsx">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AADHIASARANA T — AI & Data Science student, Full-Stack Developer. Building intelligent systems and modern web applications." />
+    <title>AADHIASARANA T · Portfolio</title>
+
+    <!-- Bebas Neue (display/headings) + DM Sans (body) + JetBrains Mono (code) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Preload critical modules -->
+    <link rel="modulepreload" href="/src/main.tsx" />
+    <link rel="modulepreload" href="/src/App.tsx" />
+
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
       body {
-        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        background: #0a0a0a;
+        font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+        background: #050508;
         color: #ffffff;
         overflow-x: hidden;
         line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 10px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: #0a0a0a;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 5px;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
-
-      /* Text Selection */
-      ::selection {
-        background: #ffffff;
-        color: #000000;
-      }
-
-      /* Smooth Animations */
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      @keyframes slideInFromLeft {
-        from {
-          opacity: 0;
-          transform: translateX(-50px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
-
-      @keyframes scaleIn {
-        from {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-
-      .animate-on-scroll {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.8s ease, transform 0.8s ease;
-      }
-
-      .animate-on-scroll.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      /* Grain Texture Overlay */
-      .grain-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        opacity: 0.03;
-        z-index: 1000;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      }
+      ::-webkit-scrollbar { width: 5px; }
+      ::-webkit-scrollbar-track { background: #050508; }
+      ::-webkit-scrollbar-thumb { background: rgba(79,255,176,0.2); border-radius: 999px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(79,255,176,0.45); }
+      ::selection { background: rgba(79,255,176,0.18); color: #4FFFB0; }
     </style>
   </head>
   <body>
-    <div class="grain-overlay"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

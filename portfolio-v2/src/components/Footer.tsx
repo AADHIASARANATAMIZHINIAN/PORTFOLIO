@@ -1,172 +1,104 @@
-import { useEffect, useState } from 'react'
-import { Github, Linkedin, Mail, Heart, Instagram } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Github, Linkedin, Mail, Instagram } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { scrollToSection } from '../utils/scroll'
 
-const innovativeQuotes = [
-  {
-    quote: "Code is poetry written in logic.",
-    author: "— The Developer's Creed"
-  },
-  {
-    quote: "Innovation distinguishes between a leader and a follower.",
-    author: "— Steve Jobs"
-  },
-  {
-    quote: "The best way to predict the future is to invent it.",
-    author: "— Alan Kay"
-  },
-  {
-    quote: "AI is not about replacing humans, it's about augmenting human capabilities.",
-    author: "— Fei-Fei Li"
-  },
-  {
-    quote: "First, solve the problem. Then, write the code.",
-    author: "— John Johnson"
-  },
-  {
-    quote: "The only way to do great work is to love what you do.",
-    author: "— Steve Jobs"
-  },
-  {
-    quote: "Every great developer you know got there by solving problems they were unqualified to solve.",
-    author: "— Patrick McKenzie"
-  },
-  {
-    quote: "Learning never exhausts the mind.",
-    author: "— Leonardo da Vinci"
-  },
-  {
-    quote: "The beautiful thing about learning is that no one can take it away from you.",
-    author: "— B.B. King"
-  },
-  {
-    quote: "Technology is best when it brings people together.",
-    author: "— Matt Mullenweg"
-  }
+const navLinks = [
+  { label: 'About',    id: 'about'      },
+  { label: 'Work',     id: 'projects'   },
+  { label: 'Stack',    id: 'skills'     },
+  { label: 'Journey',  id: 'experience' },
+  { label: 'Contact',  id: 'contact'    },
+]
+
+const socials = [
+  { icon: Github,    href: 'https://github.com/AADHIASARANATAMIZHINIAN',           label: 'GitHub'    },
+  { icon: Linkedin,  href: 'https://www.linkedin.com/in/aadhiasarana-t-529641328', label: 'LinkedIn'  },
+  { icon: Instagram, href: 'https://www.instagram.com/__aadhiasarana_',            label: 'Instagram' },
+  { icon: Mail,      href: 'mailto:aadhiasarana12@gmail.com',                      label: 'Email'     },
 ]
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear()
-  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentQuoteIndex((prev) => (prev + 1) % innovativeQuotes.length)
-    }, 5000) // Change quote every 5 seconds
-
-    return () => clearInterval(interval)
-  }, [])
+  const year = new Date().getFullYear()
 
   return (
-    <footer className="relative py-16 border-t border-white/5 bg-gradient-to-b from-dark-900/50 to-dark-900">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-12 mb-12">
-          {/* Left - Branding */}
-          <motion.div 
-            className="space-y-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h3 className="text-2xl font-display font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">AADHIASARANA T</h3>
-            <p className="text-gray-400">
-              AI & Data Science student exploring AI/ML, web development, and building cool stuff! 🚀
+    <footer className="relative border-t border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.55 }}
+        >
+          {/* Brand */}
+          <div className="space-y-3">
+            <span
+              className="font-display font-bold text-white text-2xl block"
+              style={{ letterSpacing: '0.02em' }}
+            >
+              AT
+            </span>
+            <p className="font-body text-white/40 text-sm leading-relaxed max-w-xs">
+              AI & Data Science undergraduate. Building things that matter.
             </p>
-            <div className="flex items-center gap-4">
-              <motion.a
-                href="https://github.com/AADHIASARANATAMIZHINIAN"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
-                aria-label="GitHub"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Github className="w-5 h-5" />
-              </motion.a>
-              <motion.a
-                href="https://www.linkedin.com/in/aadhiasarana-t-529641328"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
-                aria-label="LinkedIn"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Linkedin className="w-5 h-5" />
-              </motion.a>
-              <motion.a
-                href="https://www.instagram.com/__aadhiasarana_"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
-                aria-label="Instagram"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Instagram className="w-5 h-5" />
-              </motion.a>
-              <motion.a
-                href="mailto:aadhiasarana12@gmail.com"
-                className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5"
-                aria-label="Email"
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Mail className="w-5 h-5" />
-              </motion.a>
+          </div>
+
+          {/* Nav links */}
+          <div>
+            <p className="font-mono text-[10px] text-white/25 tracking-[0.2em] uppercase mb-4">Navigation</p>
+            <ul className="space-y-2">
+              {navLinks.map((link) => (
+                <li key={link.label}>
+                  <button
+                    onClick={() => scrollToSection(link.id)}
+                    className="font-body text-sm text-white/45 hover:text-white/80 transition-colors duration-200"
+                  >
+                    {link.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div>
+            <p className="font-mono text-[10px] text-white/25 tracking-[0.2em] uppercase mb-4">Connect</p>
+            <div className="flex flex-wrap gap-2">
+              {socials.map((s) => (
+                <motion.a
+                  key={s.label}
+                  href={s.href}
+                  target={s.label !== 'Email' ? '_blank' : undefined}
+                  rel={s.label !== 'Email' ? 'noopener noreferrer' : undefined}
+                  aria-label={s.label}
+                  className="p-2.5 rounded-xl text-white/35 hover:text-brand transition-colors duration-200"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  whileHover={{ scale: 1.15, borderColor: 'rgba(79,255,176,0.30)' }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <s.icon className="w-4 h-4" />
+                </motion.a>
+              ))}
             </div>
-          </motion.div>
-
-          {/* Middle & Right - Rotating Quotes */}
-          <div className="md:col-span-2 flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentQuoteIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="text-center space-y-4"
-              >
-                <p className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white leading-relaxed">
-                  "{innovativeQuotes[currentQuoteIndex].quote}"
-                </p>
-                <p className="text-lg text-gray-400 font-light">
-                  {innovativeQuotes[currentQuoteIndex].author}
-                </p>
-                {/* Quote indicator dots */}
-                <div className="flex items-center justify-center gap-2 pt-4">
-                  {innovativeQuotes.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentQuoteIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index === currentQuoteIndex 
-                          ? 'bg-white w-8' 
-                          : 'bg-white/30 hover:bg-white/50'
-                      }`}
-                      aria-label={`Go to quote ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Bottom - Copyright */}
-        <div className="pt-8 border-t border-white/5">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-            <p>
-              © {currentYear} AADHIASARANA T. All rights reserved.
-            </p>
-            <p className="flex items-center gap-2">
-              Made with <Heart className="w-4 h-4 text-red-500" fill="currentColor" /> and lots of coffee
-            </p>
-          </div>
-        </div>
+        {/* Bottom rule */}
+        <motion.div
+          className="pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <p className="font-body text-xs text-white/25">
+            © {year} AADHIASARANA T
+          </p>
+          <p className="font-body text-xs text-white/20">
+            Built with React · Tailwind · Framer Motion
+          </p>
+        </motion.div>
       </div>
     </footer>
   )

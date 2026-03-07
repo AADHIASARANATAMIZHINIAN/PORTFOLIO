@@ -1,141 +1,254 @@
-import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { scrollToSection } from '../utils/scroll'
 
 interface NavigationProps {
   activeSection: string
 }
 
-export default function Navigation({ activeSection }: NavigationProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  
-  const navItems = [
-    { id: 'hero', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'contact', label: 'Contact' },
-  ]
+const links = [
+  { id: 'about',      label: 'About'   },
+  { id: 'projects',   label: 'Work'    },
+  { id: 'skills',     label: 'Stack'   },
+  { id: 'experience', label: 'Journey' },
+  { id: 'contact',    label: 'Contact' },
+]
 
-  const handleMenuClick = () => {
-    setIsMobileMenuOpen(false)
+export default function Navigation({ activeSection }: NavigationProps) {
+  const [scrolled, setScrolled]   = useState(false)
+  const [menuOpen, setMenuOpen]   = useState(false)
+  const [hovered, setHovered]     = useState<string | null>(null)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onLenis  = (e: Event) =>
+      setScrolled((e as CustomEvent<{ scroll: number }>).detail.scroll > 40)
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('lenis-scroll', onLenis)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('lenis-scroll', onLenis)
+    }
+  }, [])
+
+  const go = (id: string) => {
+    scrollToSection(id)
+    setMenuOpen(false)
   }
 
   return (
     <>
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <motion.a
-            href="#hero"
-            className="text-lg md:text-xl font-display font-bold tracking-tight hover:opacity-80 transition-opacity relative z-50 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent hover:from-white hover:to-gray-300"
-            onClick={handleMenuClick}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            AADHIASARANA T
-          </motion.a>
+      {/* ── Top bar ── */}
+      <nav style={{
+        position:       'fixed',
+        top: 0, left: 0, right: 0,
+        zIndex:         50,
+        height:         '64px',
+        display:        'flex',
+        alignItems:     'center',
+        padding:        '0 32px',
+        background:     scrolled ? 'rgba(5,5,8,0.82)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(20px)'        : 'none',
+        borderBottom:   scrolled ? '1px solid rgba(255,255,255,0.07)' : '1px solid transparent',
+        transition:     'background 0.3s, border-color 0.3s',
+        boxSizing:      'border-box',
+      }}>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <motion.a
-                key={item.id}
-                href={`#${item.id}`}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 relative ${
-                  activeSection === item.id
-                    ? 'bg-white/15 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {item.label}
-                {activeSection === item.id && (
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-white to-gray-400"
-                    layoutId="navIndicator"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                )}
-              </motion.a>
-            ))}
-            <motion.a
-              href="/AADHI_RESUME.pdf"
-              download="AADHI_RESUME.pdf"
-              className="ml-4 px-6 py-2 bg-gradient-to-r from-gray-300 to-gray-400 hover:from-white hover:to-gray-300 text-black text-sm font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-gray-400/30"
-              whileHover={{ scale: 1.08, boxShadow: "0 0 20px rgba(200, 200, 200, 0.4)" }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Resume
-            </motion.a>
-          </div>
+        {/* Logo */}
+        <button
+          onClick={() => go('hero')}
+          style={{
+            fontFamily:  'Clash Display, sans-serif',
+            fontWeight:  700,
+            fontSize:    '20px',
+            color:       '#ffffff',
+            letterSpacing: '-0.04em',
+            background:  'none',
+            border:      'none',
+            cursor:      'pointer',
+            padding:     0,
+            marginRight: 'auto',
+            transition:  'color 0.2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.color = '#4FFFB0')}
+          onMouseLeave={e => (e.currentTarget.style.color = '#ffffff')}
+        >
+          AT
+        </button>
 
-          {/* Mobile Menu Button */}
-          <button 
-            type="button"
-            title="Toggle mobile menu"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors relative z-50"
+        {/* Desktop links */}
+        <ul style={{
+          display:    'none',
+          alignItems: 'center',
+          gap:        '4px',
+          listStyle:  'none',
+          margin:     0,
+          padding:    0,
+        }} className="md-flex">
+          {links.map(link => {
+            const active = activeSection === link.id
+            const hover  = hovered === link.id
+            return (
+              <li key={link.id}>
+                <button
+                  onClick={() => go(link.id)}
+                  onMouseEnter={() => setHovered(link.id)}
+                  onMouseLeave={() => setHovered(null)}
+                  style={{
+                    position:    'relative',
+                    padding:     '8px 18px',
+                    background:  hover ? 'rgba(79,255,176,0.10)' : 'transparent',
+                    border:      hover ? '1px solid rgba(79,255,176,0.22)' : '1px solid transparent',
+                    borderRadius: '8px',
+                    cursor:      'pointer',
+                    fontFamily:  'DM Sans, sans-serif',
+                    fontSize:    '14px',
+                    color:       active ? '#4FFFB0' : hover ? '#4FFFB0' : 'rgba(255,255,255,0.5)',
+                    transition:  'background 0.2s, border-color 0.2s, color 0.2s',
+                  }}
+                >
+                  {link.label}
+                  {active && (
+                    <span style={{
+                      position:    'absolute',
+                      bottom:      '2px',
+                      left:        '50%',
+                      transform:   'translateX(-50%)',
+                      width:       '4px',
+                      height:      '4px',
+                      borderRadius: '50%',
+                      background:  '#4FFFB0',
+                    }} />
+                  )}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+
+        {/* Hire me */}
+        <button
+          onClick={() => go('contact')}
+          className="md-hire"
+          style={{
+            marginLeft:   '16px',
+            padding:      '8px 16px',
+            borderRadius: '8px',
+            fontFamily:   'DM Sans, sans-serif',
+            fontSize:     '14px',
+            fontWeight:   500,
+            color:        '#4FFFB0',
+            background:   'rgba(79,255,176,0.08)',
+            border:       '1px solid rgba(79,255,176,0.30)',
+            cursor:       'pointer',
+            display:      'none',
+            transition:   'box-shadow 0.2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 0 20px rgba(79,255,176,0.35)')}
+          onMouseLeave={e => (e.currentTarget.style.boxShadow = 'none')}
+        >
+          Hire me
+        </button>
+
+        {/* Hamburger */}
+        <button
+          onClick={() => setMenuOpen(p => !p)}
+          className="md-hide"
+          aria-label="Menu"
+          style={{
+            background: 'none',
+            border:     'none',
+            cursor:     'pointer',
+            padding:    '6px',
+            display:    'flex',
+            flexDirection: 'column',
+            gap:        '5px',
+            marginLeft: 'auto',
+          }}
+        >
+          {[0, 1, 2].map(i => (
+            <span key={i} style={{
+              display:      'block',
+              width:        '22px',
+              height:       '2px',
+              background:   'rgba(255,255,255,0.7)',
+              borderRadius: '2px',
+              transition:   'transform 0.25s, opacity 0.25s',
+              transform:
+                menuOpen && i === 0 ? 'rotate(45deg) translate(5px,5px)'  :
+                menuOpen && i === 2 ? 'rotate(-45deg) translate(5px,-5px)' : 'none',
+              opacity: menuOpen && i === 1 ? 0 : 1,
+            }} />
+          ))}
+        </button>
+      </nav>
+
+      {/* ── Mobile dropdown ── */}
+      <div style={{
+        position:       'fixed',
+        top:            '68px',
+        left:           '16px',
+        right:          '16px',
+        zIndex:         49,
+        background:     'rgba(5,5,8,0.90)',
+        backdropFilter: 'blur(24px)',
+        border:         '1px solid rgba(255,255,255,0.09)',
+        borderRadius:   '16px',
+        padding:        '16px',
+        display:        menuOpen ? 'block' : 'none',
+      }} className="md-hide">
+        {links.map(link => (
+          <button
+            key={link.id}
+            onClick={() => go(link.id)}
+            style={{
+              display:      'block',
+              width:        '100%',
+              textAlign:    'left',
+              padding:      '12px 16px',
+              borderRadius: '10px',
+              background:   activeSection === link.id ? 'rgba(79,255,176,0.10)' : 'transparent',
+              border:       'none',
+              cursor:       'pointer',
+              fontFamily:   'DM Sans, sans-serif',
+              fontSize:     '16px',
+              color:        activeSection === link.id ? '#4FFFB0' : 'rgba(255,255,255,0.6)',
+              marginBottom: '2px',
+            }}
           >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
+            {link.label}
+          </button>
+        ))}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '8px', paddingTop: '8px' }}>
+          <button
+            onClick={() => go('contact')}
+            style={{
+              display:      'block',
+              width:        '100%',
+              padding:      '12px 16px',
+              borderRadius: '10px',
+              fontFamily:   'DM Sans, sans-serif',
+              fontSize:     '14px',
+              fontWeight:   600,
+              color:        '#4FFFB0',
+              background:   'rgba(79,255,176,0.10)',
+              border:       '1px solid rgba(79,255,176,0.28)',
+              cursor:       'pointer',
+            }}
+          >
+            Hire me
           </button>
         </div>
       </div>
-    </nav>
 
-    {/* Mobile Menu Overlay */}
-    <AnimatePresence>
-      {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, x: '100%' }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: '100%' }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="fixed inset-0 z-40 md:hidden bg-dark-900/95 backdrop-blur-lg"
-        >
-          <div className="flex flex-col items-center justify-center h-full space-y-8 px-6">
-            {navItems.map((item, index) => (
-              <motion.a
-                key={item.id}
-                href={`#${item.id}`}
-                onClick={handleMenuClick}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`text-2xl font-display font-bold tracking-tight transition-colors ${
-                  activeSection === item.id
-                    ? 'text-white'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                {item.label}
-              </motion.a>
-            ))}
-            
-            <motion.a
-              href="/AADHI_RESUME.pdf"
-              download="AADHI_RESUME.pdf"
-              onClick={handleMenuClick}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: navItems.length * 0.1 }}
-              className="mt-8 px-8 py-3 bg-white text-black text-lg font-semibold rounded-lg hover:bg-gray-200 transition-all duration-300"
-            >
-              View Resume
-            </motion.a>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* Inject nav-specific CSS once */}
+      <style>{`
+        @media (min-width: 768px) {
+          .md-flex  { display: flex !important; }
+          .md-hire  { display: block !important; }
+          .md-hide  { display: none !important; }
+        }
+      `}</style>
     </>
   )
 }

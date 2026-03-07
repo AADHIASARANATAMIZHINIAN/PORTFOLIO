@@ -1,21 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import Lenis from 'lenis'
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
-  const lenisRef = useRef<Lenis | null>(null)
-  const wrapperRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
-    // Disable smooth scroll on mobile for better performance
+    // Skip smooth scroll on mobile for performance
     const isMobile = window.innerWidth < 768
-    
-    if (isMobile) {
-      return // Skip smooth scroll on mobile
-    }
-    
+    if (isMobile) return
+
     const lenis = new Lenis({
-      wrapper: wrapperRef.current!,
-      content: wrapperRef.current!,
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
@@ -24,27 +16,30 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       touchMultiplier: 1.5,
       infinite: false,
       syncTouch: false,
-      prevent: (node) => node.classList.contains('no-smooth-scroll')
+      prevent: (node) => node.classList.contains('no-smooth-scroll'),
     })
 
-    lenisRef.current = lenis
+    // Expose lenis globally so other components can call lenis.scrollTo()
+    ;(window as any).__lenis = lenis
+
+    // Dispatch custom scroll events so nav + other components can track scroll position
+    lenis.on('scroll', ({ scroll }: { scroll: number }) => {
+      window.dispatchEvent(new CustomEvent('lenis-scroll', { detail: { scroll } }))
+    })
 
     let rafId: number
     function raf(time: number) {
       lenis.raf(time)
       rafId = requestAnimationFrame(raf)
     }
-
     rafId = requestAnimationFrame(raf)
 
     return () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId)
-      }
+      cancelAnimationFrame(rafId)
       lenis.destroy()
-      lenisRef.current = null
+      ;(window as any).__lenis = null
     }
   }, [])
 
-  return <div ref={wrapperRef} style={{ height: '100vh', overflow: 'hidden' }}>{children}</div>
+  return <>{children}</>
 }

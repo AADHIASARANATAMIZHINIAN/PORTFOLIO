@@ -2,122 +2,126 @@ import { motion } from 'framer-motion'
 
 const categories = [
   {
+    title: 'Languages',
+    items: ['Python', 'TypeScript', 'JavaScript', 'Java', 'C'],
+    accent: 'rgba(123,97,255,',
+  },
+  {
     title: 'Frontend',
-    items: ['React', 'TypeScript', 'JavaScript'],
+    items: ['React', 'Tailwind CSS', 'Framer Motion', 'Vite', 'HTML / CSS'],
+    accent: 'rgba(11,255,228,',
   },
   {
     title: 'Backend',
-    items: ['Node.js', 'REST APIs', 'Databases'],
+    items: ['Node.js', 'Express', 'Flask', 'Django', 'REST APIs', 'MongoDB', 'Firebase'],
+    accent: 'rgba(79,255,176,',
   },
   {
     title: 'AI & Data',
-    items: ['Python', 'Machine Learning', 'Data Analysis'],
+    items: ['scikit-learn', 'pandas', 'NumPy', 'Matplotlib', 'Jupyter'],
+    accent: 'rgba(255,168,0,',
   },
   {
     title: 'Tools',
-    items: ['Git', 'Docker', 'AWS'],
+    items: ['Git', 'Arch Linux', 'Docker', 'Vercel', 'GitHub Actions'],
+    accent: 'rgba(255,45,120,',
   },
+]
+
+const learning = [
+  'Systems programming in C',
+  'ML model deployment',
+  'SQL & data pipelines',
+  'Next.js App Router',
 ]
 
 export default function Skills() {
   return (
-    <section id="skills" className="py-32 relative">
+    <section id="skills" className="py-28 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Section Label */}
-        <motion.div 
-          className="mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-            [03] Expertise
-          </span>
-        </motion.div>
 
-        {/* Section Title */}
-        <motion.div 
-          className="mb-20"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold leading-tight max-w-4xl text-white">
-            Expertise
-          </h2>
-        </motion.div>
+        {/* Section header */}
+        <div className="relative mb-20">
+          <span className="section-num select-none" aria-hidden="true">03</span>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.55 }}
+          >
+            <p className="font-mono text-xs text-brand/70 tracking-[0.2em] uppercase mb-3">Tech Stack</p>
+            <div style={{ overflow: 'hidden' }}>
+              <motion.h2
+                className="font-display font-bold text-white"
+                style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)', letterSpacing: '0.02em', lineHeight: 0.95 }}
+                initial={{ clipPath: 'inset(100% 0 0 0)', y: 20 }}
+                whileInView={{ clipPath: 'inset(0% 0 0 0)', y: 0 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                My{' '}
+                <span className="brand-gradient-text">toolkit</span>
+              </motion.h2>
+            </div>
+          </motion.div>
+        </div>
 
-        {/* Skills Grid Categories */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category, index) => (
+        {/* Category cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {categories.map((cat, i) => (
             <motion.div
-              key={category.title}
-              className="group space-y-3 p-5 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8 transition-all duration-300"
+              key={cat.title}
+              className="glass glass-hover p-5 relative overflow-hidden"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -3 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 0.5, delay: i * 0.07 }}
+              whileHover={{ y: -4 }}
             >
-              <h3 className="text-lg font-bold text-white">
-                {category.title}
+              {/* Accent line */}
+              <div
+                className="absolute top-0 left-0 right-0 h-px"
+                style={{ background: `linear-gradient(90deg, transparent, ${cat.accent}0.6), transparent)` }}
+              />
+              <h3 className="font-display font-semibold text-white/90 text-sm mb-4 tracking-wide">
+                {cat.title}
               </h3>
-              <ul className="space-y-2">
-                {category.items.map((item, i) => (
-                  <motion.li 
-                    key={item} 
-                    className="text-gray-400 flex items-center gap-2 text-sm"
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: false }}
-                    transition={{ duration: 0.4, delay: index * 0.1 + i * 0.05 }}
+              <div className="flex flex-wrap gap-2">
+                {cat.items.map((item) => (
+                  <span
+                    key={item}
+                    className="font-body text-xs px-2.5 py-1 rounded-lg text-white/60 hover:text-white/90 transition-colors duration-200"
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
                   >
-                    <span className="w-1 h-1 rounded-full bg-white"></span>
                     {item}
-                  </motion.li>
+                  </span>
                 ))}
-              </ul>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Additional Info */}
-        <motion.div 
-          className="mt-12 md:mt-20"
-          initial={{ opacity: 0, y: 40 }}
+        {/* Currently learning */}
+        <motion.div
+          className="mt-8 glass p-6"
+          style={{ borderLeft: '2px solid rgba(79,255,176,0.4)' }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.55, delay: 0.3 }}
         >
-          <motion.div 
-            className="bg-gradient-to-br from-white/5 via-white/2 to-gray-300/5 backdrop-blur-xl border border-white/15 rounded-3xl p-6 md:p-12 hover:border-white/30 transition-all duration-300 shadow-2xl"
-            whileHover={{ scale: 1.02, borderColor: "rgba(255,255,255,0.3)", boxShadow: "0 20px 50px rgba(139,92,246,0.15)" }}
-          >
-            <div className="grid md:grid-cols-3 gap-6 md:gap-8 text-center">
-              {[
-                { title: "Fast", description: "Quick turnaround without compromising quality" },
-                { title: "Scalable", description: "Solutions built to grow with your business" },
-                { title: "Responsive", description: "Seamless experiences across all devices" },
-              ].map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -8, scale: 1.05 }}
-                  className="group cursor-default"
-                >
-                  <div className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-white via-white to-gray-300 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-300 transition-all">
-                    {item.title}
-                  </div>
-                  <div className="text-gray-400 group-hover:text-gray-300 transition-colors">{item.description}</div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          <p className="font-body text-white/50 text-sm mb-4">Currently deepening —</p>
+          <div className="flex flex-wrap gap-2.5">
+            {learning.map((item) => (
+              <span
+                key={item}
+                className="font-body text-sm px-3.5 py-1.5 rounded-xl text-brand/80 hover:text-brand transition-colors duration-200"
+                style={{ background: 'rgba(79,255,176,0.07)', border: '1px solid rgba(79,255,176,0.20)' }}
+              >
+                {item}
+              </span>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

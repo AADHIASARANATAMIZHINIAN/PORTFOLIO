@@ -18,10 +18,10 @@ export default defineConfig({
         manualChunks: {
           // Vendor chunks for better caching
           'react-vendor': ['react', 'react-dom'],
-          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei', 'ogl'],
+          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
           'animation-vendor': ['framer-motion', 'lenis'],
           'ui-vendor': ['lucide-react', 'react-icons'],
-          'utils-vendor': ['clsx', 'tailwind-merge', 'class-variance-authority'],
+          'utils-vendor': ['clsx', 'tailwind-merge'],
         },
       },
     },
