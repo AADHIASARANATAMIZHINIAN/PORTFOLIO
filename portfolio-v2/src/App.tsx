@@ -10,7 +10,6 @@ import CurrentlyBuilding from './components/CurrentlyBuilding.tsx'
 import Contact from './components/Contact.tsx'
 import Footer from './components/Footer.tsx'
 import SmoothScroll from './components/SmoothScroll.tsx'
-import SplashScreen from './components/SplashScreen.tsx'
 
 // Aurora background blobs — fixed, slowly drifting
 const auroraBlobs = [
@@ -46,7 +45,6 @@ const auroraBlobs = [
 
 function App() {
   const [activeSection, setActiveSection] = useState('hero')
-  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('splashShown'))
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -73,11 +71,6 @@ function App() {
       sectionEls.forEach((el) => sectionObserver.unobserve(el))
     }
   }, [])
-
-  const handleSplashComplete = () => {
-    sessionStorage.setItem('splashShown', 'true')
-    setShowSplash(false)
-  }
 
   const content = (
     <div className="relative min-h-screen text-white bg-[#050508]">
@@ -158,16 +151,7 @@ function App() {
     </div>
   )
 
-  return (
-    <>
-      <AnimatePresence mode="wait">
-        {showSplash && (
-          <SplashScreen key="splash" onComplete={handleSplashComplete} />
-        )}
-      </AnimatePresence>
-      {isMobile ? content : <SmoothScroll>{content}</SmoothScroll>}
-    </>
-  )
+  return isMobile ? content : <SmoothScroll>{content}</SmoothScroll>
 }
 
 export default App
