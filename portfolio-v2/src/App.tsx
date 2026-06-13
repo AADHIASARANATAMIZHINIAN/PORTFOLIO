@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Navigation from './components/Navigation.tsx'
 import Hero from './components/Hero.tsx'
 import About from './components/About.tsx'
