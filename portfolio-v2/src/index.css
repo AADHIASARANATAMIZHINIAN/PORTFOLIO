@@ -162,11 +162,18 @@
   /* ── Chat widget textarea placeholder ── */
   #chat-input::placeholder { color: rgba(255,255,255,0.28); }
 
-  /* ── Chat widget scrollbar ── */
-  #chat-panel ::-webkit-scrollbar { width: 4px; }
-  #chat-panel ::-webkit-scrollbar-thumb {
-    background: rgba(79,255,176,0.18);
+  /* ── Chat widget scrollbar (always visible, brand colored) ── */
+  #chat-panel ::-webkit-scrollbar { width: 5px; }
+  #chat-panel ::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.03);
     border-radius: 999px;
+  }
+  #chat-panel ::-webkit-scrollbar-thumb {
+    background: rgba(79,255,176,0.35);
+    border-radius: 999px;
+  }
+  #chat-panel ::-webkit-scrollbar-thumb:hover {
+    background: rgba(79,255,176,0.6);
   }
 
   /* ── Reduce motion ── */

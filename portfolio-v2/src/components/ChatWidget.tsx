@@ -218,8 +218,12 @@ export default function ChatWidget() {
 
             {/* Messages */}
             <div ref={bodyRef}
-              className="flex-1 overflow-y-auto flex flex-col gap-3 px-4 py-4"
-              style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(79,255,176,0.15) transparent' }}>
+              className="flex-1 overflow-y-scroll flex flex-col gap-3 px-4 py-4"
+              style={{
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(79,255,176,0.35) rgba(255,255,255,0.04)',
+                minHeight: 0,
+              }}>
 
               {messages.map(msg => (
                 <motion.div key={msg.id}
