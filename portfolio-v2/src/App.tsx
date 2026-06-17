@@ -10,6 +10,7 @@ import CurrentlyBuilding from './components/CurrentlyBuilding.tsx'
 import Contact from './components/Contact.tsx'
 import Footer from './components/Footer.tsx'
 import SmoothScroll from './components/SmoothScroll.tsx'
+import ChatWidget from './components/ChatWidget.tsx'
 
 // Aurora background blobs — fixed, slowly drifting
 const auroraBlobs = [
@@ -148,6 +149,8 @@ function App() {
         </main>
         <Footer />
       </div>
+      {/* ── AI Chat Widget — floats above everything ── */}
+      <ChatWidget />
     </div>
   )
 

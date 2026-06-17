@@ -11,6 +11,15 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    proxy: {
+      // Forwards /api/chat → local-proxy.cjs (port 3001) during dev.
+      // In production, Vercel routes this to api/chat.js automatically.
+      '/api/chat': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        rewrite: (path) => path,
+      },
+    },
   },
   build: {
     rollupOptions: {
