@@ -1,317 +1,101 @@
-import { ExternalLink, Github, ArrowUpRight } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { ExternalLink, Github, ArrowUpRight, Layers, Filter } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useMemo } from 'react'
+import { projects } from '../data/projects'
+import type { Project } from '../data/projects'
+import ProjectModal from './ProjectModal'
 
-const projects = [
-  {
-    id: 1,
-    title: 'ZYCARE',
-    description: 'Full-stack healthcare management system with role-based access control for admins, doctors, and patients. Built to replace fragmented clinic workflows with a single, real-time platform.',
-    tags: ['TypeScript', 'React', 'Node.js', 'MongoDB'],
-    domain: 'Healthcare',
-    domainColor: 'rgba(59,130,246,',
-    liveUrl: '',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/ZYCARE',
-    year: '2025',
-    featured: true,
-  },
-  {
-    id: 2,
-    title: 'FARMER-SCHEMES',
-    description: 'Agricultural access platform aggregating government subsidy schemes for small-scale farmers. Filters by eligibility, integrates Firebase for real-time data, and links directly to application portals.',
-    tags: ['JavaScript', 'Node.js', 'Firebase', 'REST APIs'],
-    domain: 'AgriTech',
-    domainColor: 'rgba(34,197,94,',
-    liveUrl: '',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/FARMER-SCHEMES',
-    year: '2025',
-  },
-  {
-    id: 3,
-    title: 'MERN LINKOVA',
-    description: 'Production-grade LinkedIn clone on the MERN stack. JWT auth with refresh tokens, real-time notifications via Socket.io, and a full social feed with media uploads.',
-    tags: ['MongoDB', 'Express', 'React', 'Node.js', 'Socket.io'],
-    domain: 'Social Platform',
-    domainColor: 'rgba(168,85,247,',
-    liveUrl: '',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/MERN_LINKOVA',
-    year: '2025',
-  },
-  {
-    id: 4,
-    title: 'Predictive Analysis System',
-    description: 'Machine learning pipeline for multi-class predictive analysis. Logistic regression model trained on real datasets with scikit-learn — includes preprocessing, evaluation metrics, and result visualisation.',
-    tags: ['Python', 'scikit-learn', 'pandas', 'Matplotlib'],
-    domain: 'AI / ML',
-    domainColor: 'rgba(123,97,255,',
-    liveUrl: '',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN',
-    year: '2025',
-  },
-  {
-    id: 5,
-    title: 'Digital Queue Management',
-    description: 'Citizen services queue system for government offices. Digital tokens, real-time tracking, and an admin dashboard for multi-counter management.',
-    tags: ['JavaScript', 'Node.js', 'Express', 'MongoDB'],
-    domain: 'Civic Tech',
-    domainColor: 'rgba(234,179,8,',
-    liveUrl: '',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/Digital-Queue-Management',
-    year: '2025',
-  },
-  {
-    id: 6,
-    title: 'SECURE VOTING SYSTEM',
-    description: 'Cryptographic voting infrastructure in Java. RSA/AES encrypted ballots, voter privacy, and an immutable audit trail for post-election verification.',
-    tags: ['Java', 'Cryptography', 'RSA/AES'],
-    domain: 'Security',
-    domainColor: 'rgba(239,68,68,',
-    liveUrl: '',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/SECURE-VOTING-SYSTEM',
-    year: '2025',
-  },
-  {
-    id: 7,
-    title: 'GYM MANAGEMENT',
-    description: 'Operations platform for fitness centers. Member lifecycle tracking, class scheduling, payment records with overdue alerts, and a retention analytics dashboard.',
-    tags: ['JavaScript', 'Node.js', 'MongoDB'],
-    domain: 'Operations',
-    domainColor: 'rgba(249,115,22,',
-    liveUrl: '',
-    githubUrl: 'https://github.com/AADHIASARANATAMIZHINIAN/GYM-MANAGEMENT',
-    year: '2025',
-  },
-]
+const filters = ['All','Healthcare','AgriTech','Social Platform','AI / ML','Civic Tech','Security','Operations'] as const
 
 export default function Projects() {
-  const featured = projects[0]
-  const rest = projects.slice(1)
+  const [active, setActive] = useState<Project | null>(null)
+  const [filter, setFilter] = useState<string>('All')
+  const filtered = useMemo(() => filter==='All' ? projects : projects.filter(p=>p.domain===filter), [filter])
 
   return (
-    <section id="projects" className="py-28 relative">
+    <section id="projects" className="py-24 lg:py-32 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-
-        {/* Section header */}
-        <div className="relative mb-20">
-          <span className="section-num select-none" aria-hidden="true">02</span>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.55 }}
-          >
-            <p className="font-mono text-xs text-brand/70 tracking-[0.2em] uppercase mb-3">Selected Work</p>
-            <div style={{ overflow: 'hidden' }}>
-              <motion.h2
-                className="font-display font-bold text-white"
-                style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)', letterSpacing: '0.02em', lineHeight: 0.95 }}
-                initial={{ clipPath: 'inset(100% 0 0 0)', y: 20 }}
-                whileInView={{ clipPath: 'inset(0% 0 0 0)', y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              >
-                The{' '}
-                <span className="brand-gradient-text">work</span>
-              </motion.h2>
+        <div className="relative mb-10">
+          <span className="section-num select-none" aria-hidden>02</span>
+          <motion.div initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, amount:0.2 }} transition={{ duration:0.55 }}>
+            <div className="inline-flex items-center gap-2 mb-3">
+              <Layers className="w-3.5 h-3.5 text-brand/60" />
+              <p className="font-mono text-xs text-brand/70 tracking-[0.2em] uppercase">Selected Work</p>
+              <span className="font-mono text-xs text-white/20">· 7 shipped</span>
+            </div>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div style={{ overflow:'hidden' }}>
+                <motion.h2 className="font-display font-bold text-white leading-none" style={{ fontSize:'clamp(2.6rem, 6vw, 4.8rem)', letterSpacing:'-0.03em' }} initial={{ y:24, opacity:0 }} whileInView={{ y:0, opacity:1 }} viewport={{ once:true }} transition={{ duration:0.65, delay:0.1, ease:[0.16,1,0.3,1] as const }}>
+                  Work that <span className="brand-gradient-text">ships.</span>
+                </motion.h2>
+                <motion.p initial={{ opacity:0 }} whileInView={{ opacity:1 }} viewport={{ once:true }} transition={{ delay:0.25, duration:0.5 }} className="font-body text-white/45 text-sm lg:text-base mt-3 max-w-xl leading-relaxed">
+                  Production-grade builds — not demos. Each card is a real repo with architecture, auth, and data. Click for case study.
+                </motion.p>
+              </div>
+              <a href="https://github.com/AADHIASARANATAMIZHINIAN" target="_blank" rel="noopener noreferrer" className="hidden sm:inline-flex items-center gap-1.5 font-mono text-xs text-white/40 hover:text-brand transition">
+                github.com/AADHIASARANATAMIZHINIAN <ArrowUpRight className="w-3 h-3" />
+              </a>
             </div>
           </motion.div>
         </div>
 
-        {/* Featured project */}
-        <motion.div
-          className="glass glass-hover mb-6 p-8 md:p-10 relative overflow-hidden"
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.1 }}
-          transition={{ duration: 0.65 }}
-          whileHover={{ y: -3 }}
-        >
-          <div
-            className="absolute top-0 right-0 w-80 h-80 pointer-events-none"
-            style={{
-              background: `radial-gradient(ellipse at top right, ${featured.domainColor}0.12) 0%, transparent 70%)`,
-              filter: 'blur(50px)',
-            }}
-          />
-          <div className="relative space-y-5">
-            <div className="flex flex-wrap items-center gap-3">
-              <span
-                className="font-mono text-xs px-2.5 py-1 rounded-lg"
-                style={{
-                  background: `${featured.domainColor}0.10)`,
-                  border: `1px solid ${featured.domainColor}0.28)`,
-                  color: '#93c5fd',
-                }}
-              >
-                {featured.domain}
-              </span>
-              <span className="font-mono text-xs text-white/30">{featured.year}</span>
-              <span
-                className="font-mono text-xs px-2.5 py-1 rounded-lg text-brand"
-                style={{ background: 'rgba(79,255,176,0.08)', border: '1px solid rgba(79,255,176,0.22)' }}
-              >
-                Featured
-              </span>
-            </div>
-
-            <h3
-              className="font-display font-bold text-white"
-              style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', letterSpacing: '0.02em' }}
-            >
-              {featured.title}
-            </h3>
-
-            <p className="font-body text-white/60 text-base leading-relaxed max-w-2xl">
-              {featured.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2">
-              {featured.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="font-mono text-xs px-2.5 py-1 rounded-lg text-white/45"
-                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div className="flex gap-3 pt-1">
-              {featured.liveUrl && (
-                <motion.a
-                  href={featured.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-body text-sm font-semibold text-black bg-brand brand-glow-btn"
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  Live Demo
-                </motion.a>
-              )}
-              <motion.a
-                href={featured.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-body text-sm font-medium text-white/65 hover:text-white transition-colors"
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-              >
-                <Github className="w-3.5 h-3.5" />
-                View on GitHub
-              </motion.a>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {rest.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className="glass glass-hover p-6 relative overflow-hidden group"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.1 }}
-              transition={{ duration: 0.5, delay: index * 0.06 }}
-              whileHover={{ y: -4 }}
-            >
-              <div
-                className="absolute top-0 right-0 w-36 h-36 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                  background: `radial-gradient(ellipse at top right, ${project.domainColor}0.10) 0%, transparent 70%)`,
-                  filter: 'blur(24px)',
-                }}
-              />
-              <div className="relative space-y-3">
-                <div className="flex items-center justify-between">
-                  <span
-                    className="font-mono text-[10px] px-2 py-0.5 rounded-md text-white/60"
-                    style={{
-                      background: `${project.domainColor}0.08)`,
-                      border: `1px solid ${project.domainColor}0.22)`,
-                    }}
-                  >
-                    {project.domain}
-                  </span>
-                  <span className="font-mono text-[10px] text-white/25">{project.year}</span>
-                </div>
-
-                <h3
-                  className="font-display font-bold text-white text-lg"
-                  style={{ letterSpacing: '0.02em' }}
-                >
-                  {project.title}
-                </h3>
-
-                <p className="font-body text-white/55 text-sm leading-relaxed line-clamp-3">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {project.tags.slice(0, 4).map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono text-[10px] px-2 py-0.5 rounded-md text-white/38"
-                      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex gap-2.5 pt-2">
-                  {project.liveUrl && (
-                    <motion.a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-body text-xs font-semibold text-black bg-brand"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <ExternalLink className="w-3 h-3" /> Live
-                    </motion.a>
-                  )}
-                  <motion.a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-body text-xs text-white/50 hover:text-white/80 transition-colors"
-                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Github className="w-3 h-3" /> GitHub
-                  </motion.a>
-                </div>
-              </div>
-            </motion.div>
+        <div className="flex items-center gap-2 mb-8 overflow-x-auto scrollbar-hide pb-1">
+          <span className="inline-flex items-center gap-1.5 font-mono text-xs text-white/25 mr-1 shrink-0"><Filter className="w-3 h-3" /> Filter</span>
+          {filters.map(f => (
+            <button key={f} onClick={()=>setFilter(f)} className={`shrink-0 px-3.5 py-1.5 rounded-full font-mono text-xs tracking-wide transition ${filter===f ? 'text-black bg-brand border border-brand' : 'text-white/50 hover:text-white bg-white/[0.04] border border-white/10 hover:border-white/15'}`}>
+              {f}
+            </button>
           ))}
         </div>
 
-        {/* View all */}
-        <motion.div
-          className="text-center mt-12"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          <motion.a
-            href="https://github.com/AADHIASARANATAMIZHINIAN"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-body text-sm text-white/40 hover:text-brand transition-colors duration-200"
-            whileHover={{ x: 4 }}
-          >
-            View all repositories on GitHub
-            <ArrowUpRight className="w-4 h-4" />
-          </motion.a>
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-6 gap-5">
+          <AnimatePresence mode="popLayout">
+          {filtered.map((project, idx) => {
+            const isFeatured = idx===0 && filter==='All'
+            return (
+              <motion.div layout key={project.id} initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, scale:0.96 }} transition={{ duration:0.4, delay: idx*0.04 }} className={`bento-card group cursor-pointer shimmer ${isFeatured ? 'md:col-span-6' : 'md:col-span-3 lg:col-span-3'} ${filtered.length===1 ? 'md:col-span-6' : ''}`} onClick={()=>setActive(project)} role="button" tabIndex={0} onKeyDown={(e: React.KeyboardEvent)=>e.key==='Enter'&&setActive(project)} aria-label={`Open ${project.title}`}>
+                <div className={`relative overflow-hidden bg-[#08080e] ${isFeatured ? 'aspect-[16/7] sm:aspect-[16/6]' : 'aspect-[16/9]'}`}>
+                  <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" loading="lazy" onError={e=>((e.target as HTMLImageElement).style.display='none')} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                  <div className="absolute top-3 left-3 flex items-center gap-2">
+                    <span className="font-mono text-[10px] px-2 py-1 rounded-full backdrop-blur" style={{ background:`${project.domainColor}0.14)`, border:`1px solid ${project.domainColor}0.24)`, color: 'white' }}>{project.domain}</span>
+                    {isFeatured && <span className="font-mono text-[10px] px-2 py-1 rounded-full bg-brand text-black font-semibold">Featured</span>}
+                  </div>
+                  <span className="absolute bottom-3 right-3 font-mono text-[10px] px-2 py-1 rounded-full bg-black/55 border border-white/10 text-white/70 backdrop-blur opacity-0 group-hover:opacity-100 transition">View case study →</span>
+                </div>
+                <div className="p-5 sm:p-6 space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-display font-bold text-white leading-none" style={{ fontSize: isFeatured ? 'clamp(1.4rem, 2.5vw, 2rem)' : '1.15rem', letterSpacing:'-0.02em' }}>{project.title}</h3>
+                    <span className="font-mono text-[10px] text-white/25 shrink-0 mt-1">{project.year}</span>
+                  </div>
+                  <p className="font-body text-white/50 text-sm leading-relaxed line-clamp-2">{project.description}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tags.slice(0,4).map(tag => <span key={tag} className="font-mono text-[10px] px-2 py-1 rounded-full text-white/45" style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.06)' }}>{tag}</span>)}
+                  </div>
+                  <div className="flex gap-2 pt-1" onClick={e=>e.stopPropagation()}>
+                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono text-xs text-white/60 hover:text-white bg-white/[0.04] hover:bg-white/[0.07] border border-white/5 transition"><Github className="w-3 h-3" /> Code</a>
+                    {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono text-xs font-medium text-black bg-brand"><ExternalLink className="w-3 h-3" /> Live</a>}
+                  </div>
+                </div>
+              </motion.div>
+            )
+          })}
+          </AnimatePresence>
         </motion.div>
+
+        {filtered.length===0 && (
+          <div className="text-center py-16 glass">
+            <p className="font-body text-sm text-white/40">No projects in this filter.</p>
+            <button onClick={()=>setFilter('All')} className="mt-3 font-mono text-xs text-brand hover:underline">Show all →</button>
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-center justify-between gap-4 mt-10 pt-6" style={{ borderTop:'1px solid rgba(255,255,255,0.06)' }}>
+          <p className="font-mono text-xs text-white/30">Images are browser mockups of each product. Replace <span className="text-white/50">public/projects/*.svg</span> with screenshots anytime.</p>
+          <a href="https://github.com/AADHIASARANATAMIZHINIAN?tab=repositories" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-body text-sm text-white/50 hover:text-white transition">View all repos <ArrowUpRight className="w-4 h-4" /></a>
+        </div>
       </div>
+      <ProjectModal project={active} onClose={()=>setActive(null)} />
     </section>
   )
 }

@@ -1,5 +1,3 @@
-// src/utils/offlineChat.ts — Offline NLP chat engine
-
 const STOPWORDS = new Set([
   'a','an','the','is','it','in','on','at','to','for','of','and','or','but',
   'with','by','from','up','about','into','your','you','me','my','i','we',
@@ -12,8 +10,8 @@ const STOPWORDS = new Set([
 
 interface Entry { tags: string[]; answer: string }
 
-// ── Module-level visitor name ────────────────────────────────────────────────
 let visitorName: string | null = null
+let lastEntry: Entry | null = null
 
 const FALSE_POSITIVES = new Set([
   'a','an','the','not','going','looking','interested','here','working',
@@ -47,9 +45,48 @@ function greet(msg: string) {
   return visitorName ? `${msg.replace('!', ',')} ${visitorName}!` : msg
 }
 
-// ── Knowledge Base ────────────────────────────────────────────────────────────
+const SYNONYMS: Record<string, string[]> = {
+  stack: ['tech','technologies','toolkit','skills','expertise'],
+  skills: ['stack','tech','toolkit','expertise'],
+  project: ['projects','work','app','apps','build','built','portfolio'],
+  projects: ['project','work','apps','portfolio'],
+  work: ['projects','project','apps','portfolio'],
+  job: ['hire','hiring','internship','opportunity','collaborate','freelance'],
+  hire: ['job','hiring','internship','freelance','collaborate'],
+  contact: ['email','reach','connect','social','linkedin','github'],
+  ai: ['ml','machine','learning','artificial','intelligence','model'],
+  ml: ['ai','machine','learning','model','predictive'],
+  frontend: ['react','ui','tailwind','vite','client'],
+  backend: ['server','api','express','node','flask','django'],
+}
+
+function expandTokens(tokens: string[]): string[] {
+  const out = [...tokens]
+  for (const t of tokens) {
+    const syns = SYNONYMS[t]
+    if (syns) for (const s of syns) if (!out.includes(s)) out.push(s)
+  }
+  return out
+}
+
+function levenshtein(a: string, b: string): number {
+  if (a === b) return 0
+  if (a.length < 2 || b.length < 2) return 99
+  const m = a.length, n = b.length
+  let prev = Array.from({ length: n + 1 }, (_, i) => i)
+  let cur = new Array(n + 1)
+  for (let i = 1; i <= m; i++) {
+    cur[0] = i
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i-1] === b[j-1] ? 0 : 1
+      cur[j] = Math.min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + cost)
+    }
+    ;[prev, cur] = [cur, prev]
+  }
+  return prev[n]
+}
+
 const KB: Entry[] = [
-  // WHO
   {
     tags: ['who','aadhiasarana','about','person','yourself','introduce','introduction','name','bio'],
     answer: "I'm Aadhiasarana T — an AI & Data Science undergraduate at M. Kumarasamy College of Engineering (graduating 2028) and a full-stack developer from Tamil Nadu, India. I build intelligent systems, modern web apps, and AI-powered products. Currently open to internships and freelance collaborations.",
@@ -58,19 +95,17 @@ const KB: Entry[] = [
     tags: ['personality','interests','hobbies','outside','life','japanese','linux','learning','curiosity'],
     answer: "Outside of coding, Aadhiasarana is learning Japanese (passed JLPT N5 with an A Grade). He runs Arch Linux, enjoys automation, and is deeply curious about new technologies. He sees language learning and programming as parallel pursuits — both are about mastering systems.",
   },
-
-  // SKILLS
   {
     tags: ['skills','stack','technologies','tech','languages','tools','know','use','expertise','toolkit'],
-    answer: "Full tech stack:\n\n🖥 Languages: Python, TypeScript, JavaScript, Java, C\n⚛️ Frontend: React, Tailwind CSS, Framer Motion, Vite, HTML/CSS\n🔧 Backend: Node.js, Express, Flask, Django, REST APIs, MongoDB, Firebase\n🤖 AI & Data: scikit-learn, pandas, NumPy, Matplotlib, Jupyter\n🛠 Tools: Git, Arch Linux, Docker, Vercel, GitHub Actions",
+    answer: "Full tech stack:\n\n🖥 Languages: Python, TypeScript, JavaScript, Java, C\n⚛️ Frontend: React, Tailwind CSS, Motion (Framer), Vite, HTML/CSS\n🔧 Backend: Node.js, Express, Flask, Django, REST APIs, MongoDB, Firebase\n🤖 AI & Data: scikit-learn, pandas, NumPy, Matplotlib, Jupyter\n🛠 Tools: Git, Arch Linux, Docker, Vercel, GitHub Actions",
   },
   {
     tags: ['python','backend','flask','django','node','express','server','api','rest'],
     answer: "For backend work, Aadhiasarana uses Python (Flask, Django) and Node.js with Express. He designs REST APIs, integrates ML models into production services, and has used Firebase for real-time databases.",
   },
   {
-    tags: ['react','typescript','frontend','ui','vite','tailwind','framer','css','component'],
-    answer: "Aadhiasarana builds frontends with React + TypeScript, styled with Tailwind CSS and animated with Framer Motion. He uses Vite as his dev toolchain and Lenis for smooth scroll physics — this portfolio is proof of that.",
+    tags: ['react','typescript','frontend','ui','vite','tailwind','motion','css','component'],
+    answer: "Aadhiasarana builds frontends with React + TypeScript, styled with Tailwind CSS and animated with Motion. He uses Vite as his dev toolchain and Lenis for smooth scroll physics — this portfolio is proof of that.",
   },
   {
     tags: ['ai','machine learning','ml','scikit','pandas','numpy','data','jupyter','model','deep'],
@@ -96,8 +131,6 @@ const KB: Entry[] = [
     tags: ['sql','database','mysql','postgresql','postgres','relational','db','query'],
     answer: "Aadhiasarana primarily uses MongoDB and Firebase (NoSQL), and is currently learning SQL and relational data pipelines. He's comfortable with database design and CRUD operations.",
   },
-
-  // PROJECTS
   {
     tags: ['project','projects','built','made','work','all','list','show','apps','github'],
     answer: "7 projects on GitHub:\n\n1. ZYCARE — Healthcare system (TypeScript, React, Node.js, MongoDB)\n2. FARMER-SCHEMES — Agricultural subsidy platform (JavaScript, Firebase)\n3. MERN LINKOVA — LinkedIn clone (MERN, Socket.io)\n4. Predictive Analysis — ML pipeline (Python, scikit-learn)\n5. Digital Queue Management — Civic-tech (Node.js, MongoDB)\n6. SECURE VOTING SYSTEM — Cryptographic voting (Java, RSA/AES)\n7. GYM MANAGEMENT — Fitness platform (JavaScript, MongoDB)\n\ngithub.com/AADHIASARANATAMIZHINIAN",
@@ -130,14 +163,10 @@ const KB: Entry[] = [
     tags: ['gym','fitness','management','member','schedule','payment','retention','analytics'],
     answer: "GYM MANAGEMENT is an operations platform for fitness centers — member lifecycle tracking, class scheduling, payment records with overdue alerts, and retention analytics.\n→ github.com/AADHIASARANATAMIZHINIAN/GYM-MANAGEMENT",
   },
-
-  // CURRENTLY BUILDING
   {
     tags: ['currently','building','now','progress','working','lab','active','ongoing','wip'],
     answer: "Currently in progress:\n\n🤖 ML Pipeline — End-to-end training, evaluation, deployment + automated monitoring\n🏥 ZYROVER — Healthcare rover for hospital environments with CI/CD pipelines\n🇯🇵 JLPT N5+ — Advancing Japanese beyond N5",
   },
-
-  // EXPERIENCE
   {
     tags: ['experience','internship','worked','company','role','position','background','journey','history'],
     answer: "Experience timeline:\n\n🎓 B.Tech AI & Data Science — M. Kumarasamy College of Engineering (2024–2028), CGPA: 7.98\n💼 MERN Stack Intern — Unified Mentor (2025): Firebase, system architecture, LLD\n💼 Web Dev Intern — Cognifz (2025): Responsive UI, cross-browser debugging\n\nCertifications: NPTEL IoT (2025), JLPT N5 A Grade (2026)",
@@ -162,8 +191,6 @@ const KB: Entry[] = [
     tags: ['hackathon','campus','ambassador','eduveda','extracurricular','activity','competition'],
     answer: "Aadhiasarana participates in hackathons (AI + web solutions under tight deadlines) and served as Campus Ambassador for Eduveda Academy, promoting technical opportunities among students.",
   },
-
-  // CONTACT & HIRING
   {
     tags: ['hire','hiring','freelance','collaborate','work','available','opportunity','internship','job','open'],
     answer: "Yes! Open to internships, freelance projects, and collaborations — especially in AI/ML, full-stack dev, and AI-powered products.\n\n📧 aadhiasarana12@gmail.com\n💼 linkedin.com/in/aadhiasarana-t-529641328\n💻 github.com/AADHIASARANATAMIZHINIAN",
@@ -200,22 +227,18 @@ const KB: Entry[] = [
     tags: ['maintenance','support','after','ongoing','post','launch','update'],
     answer: "Yes, Aadhiasarana offers post-launch support and maintenance for projects he builds. This can be discussed as part of the project scope.",
   },
-
-  // PORTFOLIO / THIS SITE
   {
     tags: ['portfolio','website','site','this','built','how','made','tech','3d','animation'],
-    answer: "This portfolio is built with React + TypeScript, Tailwind CSS, Framer Motion, Lenis (smooth scroll), Three.js + OGL (3D), deployed on Vercel. The aurora background, floating kanji, 3D keyboard, and glassmorphic cards are all custom-built.",
+    answer: "This portfolio is built with React + TypeScript, Tailwind CSS, Motion, Lenis (smooth scroll), Three.js (3D keyboard), deployed on Vercel. The aurora background, floating kanji, 3D keyboard, and glassmorphic cards are all custom-built.",
   },
   {
     tags: ['chatbot','widget','aadhi','assistant','offline','how','work','this','bot'],
-    answer: "I'm AADHI — a fully offline AI assistant! No cloud API, no cost, always instant. I use a local TF-IDF knowledge base + name recognition built from all portfolio data. Aadhiasarana can build similar bots with streaming APIs, RAG, and custom personas for any website.",
+    answer: "I'm AADHI — a fully offline AI assistant! No cloud API, no cost, always instant. I use a local knowledge base with fuzzy matching, synonym expansion and context memory — built from all portfolio data.",
   },
   {
-    tags: ['threejs','3d','webgl','ogl','keyboard','three','render','visual','canvas'],
-    answer: "The 3D elements — including the interactive keyboard model — are built with Three.js and OGL for immersive web experiences beyond standard UI.",
+    tags: ['threejs','3d','webgl','keyboard','three','render','visual','canvas'],
+    answer: "The 3D elements — including the interactive keyboard model — are built with Three.js for immersive web experiences beyond standard UI.",
   },
-
-  // GENERIC CONVERSATIONAL
   {
     tags: ['how','doing','feeling','going','day','good','fine','well','great'],
     answer: "Doing great, thanks for asking! I'm always ready to help. What would you like to know about Aadhiasarana's work?",
@@ -262,7 +285,6 @@ const KB: Entry[] = [
   },
 ]
 
-// ── Retrieval Engine ─────────────────────────────────────────────────────────
 function tokenize(text: string): string[] {
   return text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/)
     .filter(w => w.length > 1 && !STOPWORDS.has(w))
@@ -271,8 +293,16 @@ function tokenize(text: string): string[] {
 function score(qt: string[], entry: Entry): number {
   if (qt.length === 0) return 0
   let hits = 0
-  for (const q of qt)
-    if (entry.tags.some(t => t === q || t.includes(q) || q.includes(t))) hits++
+  for (const q of qt) {
+    let best = 0
+    for (const t of entry.tags) {
+      if (t === q) { best = 1; break }
+      if (t.includes(q) || q.includes(t)) best = Math.max(best, 0.7)
+      else if (levenshtein(q, t) <= 2) best = Math.max(best, 0.55)
+      else if (levenshtein(q, t) <= 3 && q.length > 5) best = Math.max(best, 0.35)
+    }
+    hits += best
+  }
   return hits / qt.length
 }
 
@@ -281,12 +311,12 @@ const THANKS_RE  = /^(thanks|thank you|ty|thx|cheers|appreciate|perfect|great jo
 const BYE_RE     = /^(bye|goodbye|cya|see you|later|take care|gotta go)\b/i
 const HELP_RE    = /\b(what can you|help me|what do you know|capabilities|ask you|what can i ask)\b/i
 const NAME_INTRO = /(?:i(?:'m| am)|my name(?:'s| is)|call me|this is|name's)\s+[A-Za-z]/i
+const FOLLOWUP_RE = /^(tell me more|more|details|explain|elaborate|and|what else|anything else)\b/i
 
 export function findBestAnswer(query: string): string {
   const q = query.trim()
   const name = visitorName
 
-  // Name introduction
   const detectedName = extractAndStoreName(q)
   if (detectedName || NAME_INTRO.test(q)) {
     const n = detectedName || visitorName || 'there'
@@ -303,9 +333,14 @@ export function findBestAnswer(query: string): string {
     return name ? `Catch you later, ${name}! Come back anytime 👋` : "Catch you later! Come back anytime 👋"
 
   if (HELP_RE.test(q))
-    return "I can answer questions about:\n• All 7 of Aadhiasarana's GitHub projects\n• His full tech stack and skills\n• Internship experience and education\n• What he's currently building\n• How to hire or contact him\n\nJust ask naturally!"
+    return "I can answer questions about:\n• All 7 of Aadhiasarana's GitHub projects\n• His full tech stack and skills\n• Internship experience and education\n• What he's currently building\n• How to hire or contact him\n\nJust ask naturally — typos are fine!"
 
-  const tokens = tokenize(q)
+  if (FOLLOWUP_RE.test(q) && lastEntry) {
+    return lastEntry.answer + "\n\nWant to dive deeper? Ask about a specific project or skill!"
+  }
+
+  const rawTokens = tokenize(q)
+  const tokens = expandTokens(rawTokens)
   let best: Entry | null = null
   let bestScore = 0
   for (const entry of KB) {
@@ -313,8 +348,13 @@ export function findBestAnswer(query: string): string {
     if (s > bestScore) { bestScore = s; best = entry }
   }
 
-  if (bestScore >= 0.18 && best) {
-    return name ? best.answer : best.answer
+  if (bestScore >= 0.22 && best) {
+    lastEntry = best
+    return best.answer
+  }
+
+  if (tokens.length <= 2 && lastEntry && bestScore >= 0.12) {
+    return lastEntry.answer
   }
 
   return name
@@ -322,9 +362,7 @@ export function findBestAnswer(query: string): string {
     : "Hmm, not sure about that one. Try asking about projects, skills, experience, or contact info. Or email: aadhiasarana12@gmail.com 📬"
 }
 
-// ── Simulated streaming ──────────────────────────────────────────────────────
 export async function* streamAnswer(query: string): AsyncGenerator<string, void, unknown> {
-  // Extract name before getting answer
   extractAndStoreName(query)
   const answer = findBestAnswer(query)
   const words = answer.split(' ')

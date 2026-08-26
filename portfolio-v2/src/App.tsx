@@ -11,6 +11,10 @@ import Contact from './components/Contact.tsx'
 import Footer from './components/Footer.tsx'
 import SmoothScroll from './components/SmoothScroll.tsx'
 import ChatWidget from './components/ChatWidget.tsx'
+import CommandPalette from './components/CommandPalette.tsx'
+import GitHubStats from './components/GitHubStats.tsx'
+import ScrollProgress from './components/ScrollProgress.tsx'
+import { Analytics } from '@vercel/analytics/react'
 
 // Aurora background blobs — fixed, slowly drifting
 const auroraBlobs = [
@@ -75,6 +79,8 @@ function App() {
 
   const content = (
     <div className="relative min-h-screen text-white bg-[#050508]">
+      <a href="#hero" className="skip-link">Skip to content</a>
+      <ScrollProgress />
       {/* Aurora background layer */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         {auroraBlobs.map((blob, i) => (
@@ -143,14 +149,16 @@ function App() {
           <About />
           <Projects />
           <Skills />
+          <GitHubStats />
           <Experience />
           <CurrentlyBuilding />
           <Contact />
         </main>
         <Footer />
       </div>
-      {/* ── AI Chat Widget — floats above everything ── */}
+      <CommandPalette />
       <ChatWidget />
+      <Analytics />
     </div>
   )
 

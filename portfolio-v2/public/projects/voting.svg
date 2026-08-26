@@ -1,0 +1,44 @@
+    <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 640 360">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ef4444" stop-opacity="0.18"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
+        </linearGradient>
+        <linearGradient id="gg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#0BFFE4"/></linearGradient>
+      </defs>
+      <rect width="640" height="360" rx="16" fill="#08080e"/>
+      <rect width="640" height="360" rx="16" fill="url(#g)"/>
+      <rect width="640" height="28" rx="0" fill="rgba(255,255,255,0.06)"/>
+      <circle cx="18" cy="14" r="5" fill="#ff5f57" stroke="rgba(0,0,0,0.12)"/><circle cx="32" cy="14" r="5" fill="#ffbd2e" stroke="rgba(0,0,0,0.12)"/><circle cx="46" cy="14" r="5" fill="#28c840" stroke="rgba(0,0,0,0.12)"/>
+      <rect x="72" y="8" width="220" height="12" rx="6" fill="rgba(255,255,255,0.08)"/><text x="82" y="17" font-family="'JetBrains Mono', monospace" font-size="7" fill="rgba(255,255,255,0.35)">aadhiasarana.dev/voting</text>
+      <rect x="520" y="7" width="48" height="14" rx="7" fill="#ef4444" opacity="0.12" stroke="#ef4444" stroke-opacity="0.22"/><text x="544" y="16.5" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="6" fill="#ef4444">Security</text>
+      <g transform="translate(24,42)">
+  <rect width="592" height="280" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)"/>
+  <rect x="14" y="14" width="592" height="38" rx="8" fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.16)"/>
+  <text x="20" y="30" font-family="'DM Sans', sans-serif" font-size="8" font-weight="600" fill="white">Secure Voting — Encrypted Ballot</text>
+  <text x="20" y="40" font-family="'JetBrains Mono', monospace" font-size="6" fill="rgba(255,255,255,0.4)">Java · RSA/AES · Immutable audit trail</text>
+  <text x="520" y="32" font-family="'JetBrains Mono', monospace" font-size="6" fill="#ef4444">● encrypted</text>
+  <g transform="translate(14,64)">
+    <rect width="260" height="174" rx="8" fill="#0a0a12" stroke="rgba(255,255,255,0.06)"/>
+    <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="6" fill="rgba(255,255,255,0.3)">BALLOT — district 04</text>
+    <rect x="14" y="30" width="232" height="32" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/><text x="24" y="44" font-family="'DM Sans', sans-serif" font-size="7" fill="white">◉ Candidate A</text><text x="180" y="44" font-family="'JetBrains Mono', monospace" font-size="6" fill="rgba(255,255,255,0.3)">AES-256</text>
+    <rect x="14" y="68" width="232" height="32" rx="6" fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.18)"/><text x="24" y="82" font-family="'DM Sans', sans-serif" font-size="7" font-weight="600" fill="white">◉ Candidate B — selected</text>
+    <rect x="14" y="106" width="232" height="32" rx="6" fill="rgba(255,255,255,0.03)"/><text x="24" y="120" font-family="'DM Sans', sans-serif" font-size="7" fill="rgba(255,255,255,0.5)">○ Candidate C</text>
+    <rect x="14" y="146" width="232" height="16" rx="6" fill="rgba(239,68,68,0.12)"/><text x="20" y="156" font-family="'JetBrains Mono', monospace" font-size="6" fill="#f87171">🔒 RSA encrypted · voter anon</text>
+  </g>
+  <g transform="translate(288,64)">
+    <rect width="300" height="84" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)"/>
+    <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="6" fill="rgba(255,255,255,0.35)">AUDIT TRAIL (hash-chained)</text>
+    <g font-family="'JetBrains Mono', monospace" font-size="5.5">
+      <text x="14" y="36" fill="#4FFFB0">✓  a3f9…1c2  — vote #1042 — 10:31:04</text>
+      <text x="14" y="48" fill="#4FFFB0">✓  7e2b…9a0  — vote #1043 — 10:31:12</text>
+      <text x="14" y="60" fill="rgba(255,255,255,0.35)">…  4d1a…0f3  — vote #1041 — 10:30:58</text>
+      <text x="14" y="72" fill="rgba(255,255,255,0.25)">— immutable · post-election verify</text>
+    </g>
+    <rect y="96" width="300" height="78" rx="8" fill="rgba(239,68,68,0.06)" stroke="rgba(239,68,68,0.12)"/>
+    <text x="14" y="114" font-family="'DM Sans', sans-serif" font-size="7" font-weight="600" fill="white">Privacy guaranteed</text>
+    <text x="14" y="126" font-family="'DM Sans', sans-serif" font-size="6" fill="rgba(255,255,255,0.5)">Ballot unlinkable · no double-vote · Java crypto</text>
+    <text x="14" y="140" font-family="'JetBrains Mono', monospace" font-size="5.5" fill="rgba(255,255,255,0.3)">RSA 2048 · AES-GCM · SHA-256 chain</text>
+  </g>
+</g>
+      <text x="24" y="350" font-family="'JetBrains Mono', monospace" font-size="6" letter-spacing="1" fill="rgba(255,255,255,0.22)">SECURE VOTING  ·  Security  ·  github.com/AADHIASARANATAMIZHINIAN</text>
+    </svg>

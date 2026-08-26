@@ -1,0 +1,12 @@
+{
+  "name": "AADHIASARANA T — Portfolio",
+  "short_name": "AADHI",
+  "description": "AI & Data Science student, Full-Stack Developer. Building intelligent systems and modern web applications.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050508",
+  "theme_color": "#4FFFB0",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

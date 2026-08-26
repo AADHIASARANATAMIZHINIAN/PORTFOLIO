@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="8" fill="#050508"/>
+  <rect width="32" height="32" rx="8" fill="none" stroke="rgba(79,255,176,0.25)" stroke-width="1"/>
+  <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="18" font-weight="700" fill="url(#g)" letter-spacing="0.04em">AT</text>
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4FFFB0"/>
+      <stop offset="100%" stop-color="#0BFFE4"/>
+    </linearGradient>
+  </defs>
+</svg>

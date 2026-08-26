@@ -77,7 +77,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.55 }}
           >
             <p className="font-mono text-xs text-brand/70 tracking-[0.2em] uppercase mb-3">Contact</p>
@@ -87,8 +87,8 @@ export default function Contact() {
                 style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)', letterSpacing: '0.02em', lineHeight: 0.95 }}
                 initial={{ clipPath: 'inset(100% 0 0 0)', y: 20 }}
                 whileInView={{ clipPath: 'inset(0% 0 0 0)', y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] as const }}
               >
                 Let's{' '}
                 <span className="brand-gradient-text">build</span>{' '}
@@ -99,7 +99,7 @@ export default function Contact() {
               className="font-body text-white/55 text-base mt-4 max-w-lg leading-relaxed"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5, delay: 0.25 }}
             >
               Open to internship opportunities in AI/ML engineering, full-stack development,
@@ -115,7 +115,7 @@ export default function Contact() {
             className="lg:col-span-2 space-y-4"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, delay: 0.15 }}
           >
             {contactLinks.map((link, i) => (
@@ -127,7 +127,7 @@ export default function Contact() {
                 className="glass glass-hover flex items-center gap-4 p-5 group"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.15 }}
+                viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.45, delay: 0.2 + i * 0.1 }}
                 whileHover={{ x: 4 }}
               >
@@ -155,7 +155,7 @@ export default function Contact() {
             className="lg:col-span-3"
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="glass p-7 md:p-8">
@@ -292,7 +292,7 @@ export default function Contact() {
               initial={{ opacity: 0, y: 32, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 32, scale: 0.97 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
               className="mt-8"
             >
               <Suspense
